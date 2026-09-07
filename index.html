@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>知跃 · 学习能力训练</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;800&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">跃</span><div><b>知跃</b><small>学习能力训练</small></div></div>
+      <div class="profile"><div class="avatar">林</div><div><strong>林小满</strong><span>四年级 · 今日已学 18 分钟</span></div><button class="icon-btn" aria-label="设置">⚙</button></div>
+      <nav>
+        <a class="active" href="#home"><span>⌂</span>学习舱</a><a href="#map"><span>◈</span>能力地图</a><a href="#practice"><span>✦</span>每日练习</a><a href="#library"><span>▣</span>知识宝库</a>
+      </nav>
+      <div class="sidebar-foot"><div class="streak"><span>🔥</span><div><b>7</b> 天连续学习</div></div><p>每一次思考，都是能力升级。</p></div>
+    </aside>
+    <main class="main" id="home">
+      <header class="topbar"><div><span class="eyebrow">周一 · 9月7日</span><h1>早上好，小满 <span>✦</span></h1></div><div class="top-actions"><div class="grade-switch"><button class="selected" data-grade="小学">小学</button><button data-grade="初中">初中</button></div><button class="bell" aria-label="通知">♧<i></i></button></div></header>
+      <section class="hero"><div class="hero-copy"><span class="tag">今日能力 · 推理力</span><h2>把难题，变成<br><em>会发光的线索。</em></h2><p>跟着小跃侦探，用观察、拆解和验证，找到答案背后的秘密。</p><button class="primary" id="startMission">开始今日任务 <span>→</span></button></div><div class="hero-art"><div class="sun"></div><div class="spark s1">✦</div><div class="spark s2">✧</div><div class="character">🧑‍🚀</div><div class="planet p1"></div><div class="planet p2"></div><div class="orbit"></div><div class="label-card"><b>推理力</b><span>Lv. 4 · 68%</span><div class="mini-progress"><i></i></div></div></div></section>
+      <section class="section-head"><div><span class="eyebrow">Today’s route</span><h3>今日学习路线</h3></div><button class="text-btn" id="viewAll">查看全部 <span>→</span></button></section>
+      <section class="route-grid"><article class="route-card chinese"><div class="route-icon">读</div><div class="route-title"><span class="subject">语文 · 15分钟</span><h4>原文定位练习</h4><p>回到文章里找证据，阅读题不再靠猜。</p></div><div class="route-bottom"><span class="status done">✓ 已完成热身</span><button class="round-btn" data-toast="阅读任务已开启">→</button></div></article><article class="route-card chinese"><div class="route-icon">言</div><div class="route-title"><span class="subject">语文 · 12分钟</span><h4>成语里的小剧场</h4><p>读懂故事，在语境中掌握成语和表达。</p></div><div class="route-bottom"><span class="status">○ 待探索</span><button class="round-btn" data-toast="成语任务已开启">→</button></div></article><article class="route-card brain"><div class="route-icon">✎</div><div class="route-title"><span class="subject">语文 · 8分钟</span><h4>把句子写生动</h4><p>用词语、修辞和细节，让表达更有画面。</p></div><div class="route-bottom"><span class="status">○ 待探索</span><button class="round-btn" data-toast="表达任务已开启">→</button></div></article></section>
+      <section class="section-head arsenal-head"><div><span class="eyebrow">Your toolkit</span><h3>能力武器库</h3></div><span class="toolkit-tip">把大问题，变成小动作</span></section>
+      <section class="toolkit"><button class="tool" data-toast="定位器：先找到题目中的关键线索"><span class="tool-glyph gold">◎</span><span><b>线索定位器</b><small>从题目里找关键词</small></span><strong>→</strong></button><button class="tool" data-toast="拆解镜：把复杂问题拆成三步"><span class="tool-glyph blue">⌁</span><span><b>问题拆解镜</b><small>复杂题也能分步做</small></span><strong>→</strong></button><button class="tool" data-toast="表达放大器：让你的答案更清楚"><span class="tool-glyph red">✎</span><span><b>表达放大器</b><small>把想法说得更完整</small></span><strong>→</strong></button><button class="tool" data-toast="错题回放：看看这次是哪里卡住了"><span class="tool-glyph purple">↻</span><span><b>错题回放舱</b><small>找到真正的失分点</small></span><strong>→</strong></button></section>
+      <section class="knowledge" id="library"><div class="section-head"><div><span class="eyebrow">Knowledge atlas</span><h3>语文知识地图 <small id="knowledgeCount"></small></h3></div><div class="filters"><button class="filter active" data-filter="全部">全部</button><button class="filter" data-filter="小学">小学</button><button class="filter" data-filter="初中">初中</button><button class="filter" data-filter="一年级">一年级</button><button class="filter" data-filter="二年级">二年级</button><button class="filter" data-filter="三年级">三年级</button><button class="filter" data-filter="四年级">四年级</button><button class="filter" data-filter="五年级">五年级</button><button class="filter" data-filter="六年级">六年级</button><button class="filter" data-filter="七年级">七年级</button><button class="filter" data-filter="八年级">八年级</button><button class="filter" data-filter="九年级">九年级</button></div></div><div class="knowledge-grid" id="knowledgeGrid"></div></section>
+      <section class="lower-grid"><div class="panel ability"><div class="panel-head"><div><span class="eyebrow">Ability radar</span><h3>我的能力成长</h3></div><button class="more" aria-label="更多">•••</button></div><div class="ability-row"><div class="ability-orb">✦<small>本周</small></div><div class="ability-list"><div><span>推理力</span><b>68%</b><i><em style="width:68%"></em></i></div><div><span>表达力</span><b>52%</b><i><em class="blue" style="width:52%"></em></i></div><div><span>专注力</span><b>81%</b><i><em class="purple" style="width:81%"></em></i></div></div></div><div class="quote">“会提问的人，已经走在答案前面。”</div></div><div class="panel calendar"><div class="panel-head"><div><span class="eyebrow">Keep going</span><h3>连续学习</h3></div><span class="month">9月 <b>2026</b>⌄</span></div><div class="week"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div><div class="days"><span></span><span>1</span><span>2</span><span class="checked">3</span><span class="checked">4</span><span class="checked">5</span><span class="checked">6</span><span class="today">7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span></div><div class="calendar-foot"><span class="fire">🔥</span><b>7 天</b><small>再坚持 3 天，解锁新徽章</small></div></div></section>
+    </main>
+  </div>
+  <div class="toast" id="toast"></div>
+  <div class="modal-backdrop" id="lessonModal" hidden><section class="lesson-modal" role="dialog" aria-modal="true"><button class="modal-close" id="closeLesson" aria-label="关闭">×</button><span class="tag" id="modalTag">语文 · 表达力</span><h2 id="modalTitle">成语里的小剧场</h2><p id="modalQuestion">“画蛇添足”这个成语告诉我们什么道理？</p><div class="answers" id="answers"><button data-answer="0">做事要恰到好处</button><button data-answer="1">速度越快越好</button><button data-answer="2">一定要坚持到底</button></div><div class="result" id="result"></div></section></div>
+  <script src="app.js"></script>
+</body>
+</html>

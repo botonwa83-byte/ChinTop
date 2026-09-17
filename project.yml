@@ -1,0 +1,60 @@
+name: ChinTop
+options:
+  bundleIdPrefix: com.chintop
+  deploymentTarget:
+    iOS: "16.0"
+    macOS: "13.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_LANGUAGE: zh-Hans
+    TARGETED_DEVICE_FAMILY: "1,2"
+targets:
+  ChinTop:
+    type: application
+    platform: iOS
+    sources: [ChinTopApp]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.chintop.app
+        PRODUCT_NAME: ChinTop
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: ChinTop
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        # 免加密合规问询：本 App 仅使用 Apple 标准 HTTPS，未使用自有加密
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+        SUPPORTS_MACCATALYST: YES
+  ChinTopTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - ChinTopApp/Core
+      - Tests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.chintop.tests
+        PRODUCT_NAME: ChinTopTests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  ChinTop:
+    build:
+      targets:
+        ChinTop: all
+        ChinTopTests: [test]
+    run:
+      config: Debug
+      storeKitConfiguration: ChinTopApp.storekit
+    test:
+      config: Debug
+      targets:
+        - ChinTopTests
+      storeKitConfiguration: ChinTopApp.storekit
+    profile:
+      config: Release
+      storeKitConfiguration: ChinTopApp.storekit

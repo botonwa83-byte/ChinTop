@@ -1,0 +1,41 @@
+{
+  "identifier" : "8C3A1F2E-5B7D-4E9A-B1C6-2D4F6A8C0E2B",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "22.00",
+      "familyShareable" : false,
+      "internalID" : "4F1B2C3D-9E5A-4B6C-8D7E-1A2B3C4D5E6F",
+      "localizations" : [
+        {
+          "description" : "一次买断，解锁五大专题完整题库（现代文阅读、文言文、古诗词、作文、综合性学习），小学与初中全部练习、逐题解析与错题复盘。无订阅、无续费，支持换机恢复购买。",
+          "displayName" : "完整版解锁",
+          "locale" : "zh_CN"
+        }
+      ],
+      "productID" : "com.chintop.app.full_unlock",
+      "referenceName" : "ChinTop Full Unlock",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "0",
+    "_developerTeamID" : "0",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 0,
+    "_locale" : "zh_CN",
+    "_storefront" : "CHN",
+    "_storeKitErrors" : [
+
+    ]
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

@@ -1,0 +1,8 @@
+build/
+DerivedData/
+.derived/
+.build/
+*.xcuserstate
+xcuserdata/
+.DS_Store
+.workbuddy/

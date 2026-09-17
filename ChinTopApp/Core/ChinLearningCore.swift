@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#endif
 
 public enum ChinGradeLevel: String, CaseIterable, Codable, Identifiable {
     case primary
@@ -1063,6 +1066,12 @@ public final class ChinLearningRepository {
         } else {
             snapshot = ChinLearningSnapshot()
         }
+        #if canImport(UIKit)
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.willResignActiveNotification,
+            object: nil, queue: .main
+        ) { [weak self] _ in self?.flushNow() }
+        #endif
     }
 
     public func setGrade(_ grade: ChinGradeLevel) {
@@ -1138,7 +1147,24 @@ public final class ChinLearningRepository {
         persist()
     }
 
+    /// 合并写入：一次作答里的多次改动只在 0.25 秒后落盘一次。
+    private var needsSave = false
+    private var saveScheduled = false
+
     private func persist() {
+        needsSave = true
+        guard !saveScheduled else { return }
+        saveScheduled = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
+            guard let self else { return }
+            self.saveScheduled = false
+            if self.needsSave { self.flushNow() }
+        }
+    }
+
+    /// 立即落盘（App 进入后台时必须调用，避免丢数据）。
+    public func flushNow() {
+        needsSave = false
         guard let data = try? encoder.encode(snapshot) else { return }
         defaults.set(data, forKey: storageKey)
     }

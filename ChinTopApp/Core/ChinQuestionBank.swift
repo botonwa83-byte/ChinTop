@@ -85,11 +85,32 @@ public enum ChinQuestionBank {
 
     public static let all: [ChinQuestion] = primaryReading + middleReading + primaryClassical + middleClassical + primaryPoetry + middlePoetry + primaryWriting + middleWriting + primaryIntegrated + middleIntegrated + batch1ReadingAndClassical + batch2PoetryAndWriting + batch3Integrated + batch4ReadingAndClassical + batch5PoetryAndWriting + batch6Integrated + supplementJunior + supplementPrimary + supplementRoundFive
 
+    /// 过滤结果与知识点索引缓存：题目列表在 body 里会被反复求值，避免每次全表扫描。
+    private static var questionFilterCache: [String: [ChinQuestion]] = [:]
+    private static var knowledgePointIndex: [String: ChinKnowledgePoint]?
+    private static let bankLock = NSLock()
+
     public static func questions(moduleID: String? = nil, grade: ChinGradeLevel, knowledgePointID: String? = nil, importance: ChinQuestionImportance? = nil) -> [ChinQuestion] {
-        all.filter { ($0.moduleID == moduleID || moduleID == nil) && $0.grade == grade && ($0.knowledgePointID == knowledgePointID || knowledgePointID == nil) && ($0.importance == importance || importance == nil) }
+        let cacheKey = "\(moduleID ?? "-")|\(grade.rawValue)|\(knowledgePointID ?? "-")|\(importance?.rawValue ?? "-")"
+        bankLock.lock()
+        if let cached = questionFilterCache[cacheKey] { bankLock.unlock(); return cached }
+        bankLock.unlock()
+        let value = all.filter { ($0.moduleID == moduleID || moduleID == nil) && $0.grade == grade && ($0.knowledgePointID == knowledgePointID || knowledgePointID == nil) && ($0.importance == importance || importance == nil) }
+        bankLock.lock()
+        questionFilterCache[cacheKey] = value
+        bankLock.unlock()
+        return value
     }
     public static func knowledgePoints(moduleID: String, grade: ChinGradeLevel) -> [ChinKnowledgePoint] { knowledgePointCatalog.filter { $0.moduleID == moduleID && $0.grades.contains(grade) } }
-    public static func knowledgePoint(id: String) -> ChinKnowledgePoint? { knowledgePointCatalog.first { $0.id == id } }
+    public static func knowledgePoint(id: String) -> ChinKnowledgePoint? {
+        bankLock.lock()
+        if knowledgePointIndex == nil {
+            knowledgePointIndex = Dictionary(uniqueKeysWithValues: knowledgePointCatalog.map { ($0.id, $0) })
+        }
+        let value = knowledgePointIndex?[id]
+        bankLock.unlock()
+        return value
+    }
 
     private static let curatedSource = "本地精选练习 · 来源待核验"
 

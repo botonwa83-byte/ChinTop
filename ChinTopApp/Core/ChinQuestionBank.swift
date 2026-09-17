@@ -13,9 +13,11 @@ public struct ChinQuestion: Codable, Hashable, Identifiable {
     public let id: String; public let moduleID: String; public let grade: ChinGradeLevel; public let knowledgePointID: String; public let importance: ChinQuestionImportance; public let difficulty: ChinQuestionDifficulty; public let prompt: String; public let choices: [String]; public let answerIndex: Int; public let explanation: String; public let source: String; public let sourceKind: ChinQuestionSourceKind
 }
 
-/// 题库数据层：知识点目录与人工编写题目（经五轮扩充至 423 道：小学 200、初中 223）。
+/// 题库数据层：知识点目录与人工编写题目（经六轮扩充至 535 道：小学 258、初中 277）。
 /// 第五轮为模块覆盖修正：补齐此前未覆盖的古诗词鉴赏模块（小学/初中共 8 个知识点），
 /// 并同步补齐现代文阅读、综合性学习、作文与文言文中题量最薄的知识点。
+/// 第六轮为按知识点均衡扩容：33 个知识点按覆盖学段整体加厚（两学段知识点各 +4、
+/// 单学段知识点 +3 或 +2），共 +112 道，使每个知识点的练习量都能撑起一轮巩固。
 /// 题量按知识点重要性权重配给（core:supporting:extension = 4:3:2 下限），测试以权重断言守护。
 /// 内容红线：每题只考一个主知识点；答案与解析必须正确；来源统一诚实标注，
 /// 不宣称真题、名校题或官方题库。
@@ -83,7 +85,7 @@ public enum ChinQuestionBank {
     /// 改动此常量必须同步跑 testFreeTierPolicy，保证免费体验与内购划线一致。
     public static let freeQuestionCount = 3
 
-    public static let all: [ChinQuestion] = primaryReading + middleReading + primaryClassical + middleClassical + primaryPoetry + middlePoetry + primaryWriting + middleWriting + primaryIntegrated + middleIntegrated + batch1ReadingAndClassical + batch2PoetryAndWriting + batch3Integrated + batch4ReadingAndClassical + batch5PoetryAndWriting + batch6Integrated + supplementJunior + supplementPrimary + supplementRoundFive
+    public static let all: [ChinQuestion] = primaryReading + middleReading + primaryClassical + middleClassical + primaryPoetry + middlePoetry + primaryWriting + middleWriting + primaryIntegrated + middleIntegrated + batch1ReadingAndClassical + batch2PoetryAndWriting + batch3Integrated + batch4ReadingAndClassical + batch5PoetryAndWriting + batch6Integrated + supplementJunior + supplementPrimary + supplementRoundFive + supplementRoundSix
 
     /// 过滤结果与知识点索引缓存：题目列表在 body 里会被反复求值，避免每次全表扫描。
     private static var questionFilterCache: [String: [ChinQuestion]] = [:]
@@ -684,5 +686,158 @@ public enum ChinQuestionBank {
         // 文言文 · 小学（2）
         q("sup2-p-21","classical",.primary,"classical.summary",.foundation,"《囊萤夜读》中车胤的做法说明他？",["家境贫寒却勤奋好学","家里十分富有","喜欢捕捉萤火虫","夜里不爱睡觉"],0,"“囊萤”是条件艰苦仍坚持读书的典型事例。"),
         q("sup2-p-22","classical",.primary,"classical.summary",.foundation,"《铁杵成针》告诉我们的道理是？",["只要功夫深，坚持不懈就能成功","铁棒可以磨成针","老妇人很有力气","李白不爱学习"],0,"以磨针喻恒心，讲的是坚持的力量。")
+    ]
+
+    // MARK: - 批次 10：按知识点均衡扩容（112：小学 58、初中 54）
+
+    /// 权重依据：第五轮之后所有知识点都已达到权重下限，但练习量普遍偏薄。
+    /// 本轮按知识点覆盖学段整体加厚——两学段知识点各 +4（每学段 2 道），
+    /// 小学专属知识点 +3、初中专属知识点 +2，使每个知识点都能撑起一轮巩固练习。
+    private static let supplementRoundSix: [ChinQuestion] = [
+        // 现代文阅读 · 人物形象与细节（小学 2 / 初中 2）
+        q("sup3-p-01","reading",.primary,"reading.character",.developing,"“他站在讲台上，手一直捏着衣角，声音却很稳。”这处描写主要表现人物？",["内心紧张但努力保持镇定","毫不在意这次发言","对发言内容很不熟悉","想尽快结束发言"],0,"“捏衣角”写紧张，“声音很稳”写克制，内外反差见出人物性格。"),
+        q("sup3-p-02","reading",.primary,"reading.character",.developing,"判断人物品质时，最可靠的依据是？",["人物的具体言行以及旁人的反应","作者直接给出的评价","人物的外貌描写","人物的身份和职业"],0,"言行是可核对的证据，比概括性的评价更可靠。"),
+        q("sup3-j-01","reading",.middle,"reading.character",.developing,"小说写“他把伞往同伴那边挪了挪，自己半边肩膀湿透了”，其作用是？",["用细节表现人物舍己为人的品质","说明当时雨下得很大","交代故事发生的季节","暗示两人即将分别"],0,"挪伞与湿透的肩膀是可感的行为，胜过直接赞美。"),
+        q("sup3-j-02","reading",.middle,"reading.character",.challenge,"把人物放进矛盾冲突中去分析，主要好处是？",["能看清人物的选择与价值取向","能增加文章的字数","可以省去环境描写","可以不必引用原文"],0,"冲突逼出选择，选择最能暴露人物的价值取向。"),
+        // 现代文阅读 · 证据与信息提取（小学 2 / 初中 2）
+        q("sup3-p-03","reading",.primary,"reading.evidence",.foundation,"要证明“奶奶每天起得很早”，最有效的证据是？",["直接写时间与动作的句子","描写天气的句子","文章的标题","插图下面的说明"],0,"时间和动作是最直接、可核对的信息。"),
+        q("sup3-p-04","reading",.primary,"reading.evidence",.developing,"题目问“从哪里可以看出他很着急”，答题时应？",["摘出描写动作或神态的原句，再作说明","只写“他很着急”","把全文大意复述一遍","另编一个类似的例子"],0,"先有原文依据，再有分析，答案才站得住。"),
+        q("sup3-j-03","reading",.middle,"reading.evidence",.developing,"做信息筛选题，最稳妥的做法是？",["逐项回到原文比对，排除无依据的选项","凭大致印象直接选择","选表述最长的那一项","选出现次数最多的那一项"],0,"唯一可靠的方法是回到原文逐项比对。"),
+        q("sup3-j-04","reading",.middle,"reading.evidence",.developing,"文中出现“据报道”“据统计”这类词语，其作用是？",["标明信息来源，增强可信度","表示作者自己也拿不准","增加文章的抒情色彩","引出下一段的景物描写"],0,"交代来源是为了让信息显得可查、可信。"),
+        // 现代文阅读 · 结构·线索·思路（小学 2 / 初中 2）
+        q("sup3-p-05","reading",.primary,"reading.structure",.developing,"文章先写“我”讨厌数学，再写一次被鼓励后发生改变，这种写法是？",["先抑后扬","开门见山","卒章显志","借景抒情"],0,"先压低再抬高，前后对比更突出转变。"),
+        q("sup3-p-06","reading",.primary,"reading.structure",.foundation,"“这件事，我至今想起来仍觉得温暖。”放在结尾的作用是？",["收束全文并点明中心","引出下文的回忆","设置悬念","描写环境"],0,"结尾句承担总结与点题的作用。"),
+        q("sup3-j-05","reading",.middle,"reading.structure",.developing,"文中多次出现“那盏灯”，它在结构上的作用是？",["作为线索贯穿全文","交代故事的结局","制造悬念","转换叙述人称"],0,"反复出现并推动情节的事物，往往就是行文线索。"),
+        q("sup3-j-06","reading",.middle,"reading.structure",.developing,"判断某段是否起“承上启下”作用，依据是？",["既总结上文内容，又引出下文话题","段落中出现了时间词语","这一段篇幅最长","这一段位于文章开头"],0,"承上启下看的是内容上的衔接关系，不是位置。"),
+        // 现代文阅读 · 标题含义（小学 2 / 初中 2）
+        q("sup3-p-07","reading",.primary,"reading.title",.developing,"《第一次洗碗》与《我学会了分担》相比，后者好在？",["点明了事件背后的意义","字数更少","使用了动词","采用了第一人称"],0,"好标题应当能看见事情之外的那层意思。"),
+        q("sup3-p-08","reading",.primary,"reading.title",.developing,"标题为《爸爸的旧自行车》，最可能写的主题是？",["借一件旧物写亲情与记忆","介绍自行车的构造","说明交通安全的重要","描写城市的变化"],0,"以物为题，多半是借物写人、借物抒情。"),
+        q("sup3-j-07","reading",.middle,"reading.title",.developing,"用设问句作文章标题，主要作用是？",["引发读者思考，并提示文章内容","说明作者对此存疑","增加文章的篇幅","表示故事没有结局"],0,"设问式标题既设疑又指向内容。"),
+        q("sup3-j-08","reading",.middle,"reading.title",.challenge,"评价一个标题的优劣，最重要的标准是？",["是否概括内容、暗示主旨并吸引阅读","是否使用了修辞手法","是否包含人物姓名","是否足够简短"],0,"概括、点旨、吸引阅读，是标题的三项基本功。"),
+        // 现代文阅读 · 语言赏析（小学 2 / 初中 2）
+        q("sup3-p-09","reading",.primary,"reading.language",.foundation,"“太阳公公露出了笑脸”运用的修辞手法是？",["拟人","比喻","夸张","设问"],0,"把太阳当作人来写，赋予人的表情。"),
+        q("sup3-p-10","reading",.primary,"reading.language",.developing,"赏析“树叶在风中沙沙地笑”，说法正确的是？",["用拟人写出树叶的欢快，也传达作者的愉悦","说明风刮得很大","说明树叶很脆","说明马上要下雨"],0,"景物带上了人的情态，其实是人物心情的外化。"),
+        q("sup3-j-09","reading",.middle,"reading.language",.developing,"赏析词语的基本步骤是？",["解释本义—结合语境说含义—分析表达效果","只查字典抄注释","只说明读音","只指出词性"],0,"由本义到语境义再到效果，是完整的赏析链。"),
+        q("sup3-j-10","reading",.middle,"reading.language",.challenge,"“他的话像一把钝刀，慢慢地割着我的心”好在哪里？",["把抽象的心理痛苦写得具体可感","说明那把刀很不锋利","说明他说话语速很慢","说明作者受了外伤"],0,"比喻把看不见的痛感转成可以感知的动作。"),
+        // 现代文阅读 · 说明文阅读（小学 2 / 初中 2）
+        q("sup3-p-11","reading",.primary,"reading.expository",.foundation,"说明文在开头讲一个小故事，通常是为了？",["引出说明对象，激发阅读兴趣","增加文章的长度","发表作者的议论","交代人物关系"],0,"故事只是引子，真正目的是带出说明对象。"),
+        q("sup3-p-12","reading",.primary,"reading.expository",.foundation,"“松鼠的尾巴像一把伞”使用了哪种说明方法？",["打比方","列数字","作比较","下定义"],0,"用熟悉的事物比方陌生的事物，属于打比方。"),
+        q("sup3-j-11","reading",.middle,"reading.expository",.developing,"说明文中引用谚语或诗句，主要作用是？",["增强说明的生动性与说服力","增加文章的抒情意味","代替必要的科学数据","引出人物故事"],0,"引用能让说明更有画面感和说服力。"),
+        q("sup3-j-12","reading",.middle,"reading.expository",.challenge,"判断说明文语言是否准确，主要看？",["限制性词语使用是否恰当","是否多用成语","句子是否简短","是否使用第一人称"],0,"“大约”“主要”“一般”这类限制词，是准确性的关键。"),
+        // 现代文阅读 · 开放探究（小学 2 / 初中 2）
+        q("sup3-p-13","reading",.primary,"reading.inquiry",.developing,"读完《王戎不取道旁李》，最值得学习的是？",["善于观察并作出推理判断","不喜欢吃李子","跑得比同伴快","喜欢和大家一起玩"],0,"由现象推出结论，是这个故事的核心价值。"),
+        q("sup3-p-14","reading",.primary,"reading.inquiry",.foundation,"表达看法时加上“因为……所以……”，作用是？",["把观点和理由连起来，更有说服力","让句子变得更长","让语气变得更强烈","让内容变得更生动"],0,"因果关联词能把理由显性化。"),
+        q("sup3-j-13","reading",.middle,"reading.inquiry",.developing,"探究题要求“结合材料和生活实际”，指的是？",["从材料出发，用真实经历印证并加以分析","脱离材料自由发挥","把材料内容原样复述","只引用名人名言"],0,"材料是根，生活体验是枝叶，二者要结合。"),
+        q("sup3-j-14","reading",.middle,"reading.inquiry",.challenge,"对同一现象存在两种不同看法，较妥当的处理是？",["辨析各自的依据，作出有条件的判断","认定其中只有一种正确","两边各打五十大板","回避问题不作判断"],0,"思辨不等于和稀泥，而是说清各自成立的条件。"),
+        // 现代文阅读 · 环境描写（小学 3）
+        q("sup3-p-15","reading",.primary,"reading.environment",.developing,"“雨哗哗地下着，屋里的灯一直亮着”，这句环境描写与情节的关系是？",["用雨夜烘托家人等待的焦急","说明房屋已经很旧","交代故事发生的季节","介绍人物的职业"],0,"雨夜与长明的灯共同指向等待与牵挂。"),
+        q("sup3-p-16","reading",.primary,"reading.environment",.developing,"把环境描写放在人物出场之前，主要作用是？",["为人物出场营造氛围、作铺垫","交代故事的结局","总结上文内容","转换叙述视角"],0,"先布景再出场，人物一露面就带着情绪。"),
+        q("sup3-p-17","reading",.primary,"reading.environment",.developing,"“风停了，阳光洒满小院”出现在结尾，情感基调是？",["明朗温暖，暗示心情转好","紧张不安","悲凉伤感","平淡无奇"],0,"景物由阴转晴，往往对应心情的转折。"),
+        // 现代文阅读 · 阅读策略（小学 3）
+        q("sup3-p-18","reading",.primary,"reading.strategy",.developing,"阅读时随手作批注，主要好处是？",["记录思考过程，帮助深入理解","让书页看起来更美观","加快书写速度","代替背诵"],0,"批注是把阅读时的想法固定下来。"),
+        q("sup3-p-19","reading",.primary,"reading.strategy",.foundation,"读叙事性作品时，理清“起因—经过—结果”属于？",["整体把握文章思路","品味语言","分析修辞","了解作者生平"],0,"理清脉络属于整体感知层面的策略。"),
+        q("sup3-p-20","reading",.primary,"reading.strategy",.challenge,"一篇文章读不懂，比较合适的做法是？",["放慢速度重读关键句，并查阅背景资料","立刻换一本书","只读开头的段落","把全文抄写一遍"],0,"回读关键句与补充背景，是有效的修复办法。"),
+        // 现代文阅读 · 议论文阅读（初中 2）
+        q("sup3-j-15","reading",.middle,"reading.argumentative",.foundation,"议论文中引用“诚者，天之道也”这类句子，属于？",["道理论据","事实论据","比喻论证","举例论证"],0,"引用经典言论属于道理论据。"),
+        q("sup3-j-16","reading",.middle,"reading.argumentative",.developing,"议论文语言的基本要求是？",["准确、严密、有逻辑性","华丽、铺陈","含蓄、委婉","幽默、夸张"],0,"议论以理服人，语言首先要经得起推敲。"),
+        // 文言文 · 实词（小学 2 / 初中 2）
+        q("sup3-p-21","classical",.primary,"classical.word",.foundation,"“守株待兔”中“守”的意思是？",["守候、等待","保卫","遵守","看管"],0,"“守株”即守在树桩旁等待，取守候义。"),
+        q("sup3-p-22","classical",.primary,"classical.word",.developing,"“兔走触株，折颈而死”中“走”的意思是？",["跑","行走","离开","经过"],0,"古汉语中“走”相当于今天的“跑”，跑才可能撞上树桩。"),
+        q("sup3-j-17","classical",.middle,"classical.word",.challenge,"“便要还家”中“要”的意思是？",["通“邀”，邀请","要求","重要","需要"],0,"“要”通“邀”，读 yāo，意为邀请。"),
+        q("sup3-j-18","classical",.middle,"classical.word",.developing,"“率妻子邑人来此绝境”中“妻子”的古义是？",["妻子和儿女","只指男子的配偶","妻子的兄弟","家族中的长辈"],0,"古汉语中“妻子”是两个词，指妻与子女。"),
+        // 文言文 · 内容概括与人物（小学 2 / 初中 2）
+        q("sup3-p-23","classical",.primary,"classical.summary",.developing,"《守株待兔》告诉我们的道理是？",["不能把偶然当必然，更不能心存侥幸","要多在树桩旁等待","兔子跑得非常快","那位农夫十分勤劳"],0,"偶然得兔不可复制，故事讽刺的是侥幸心理。"),
+        q("sup3-p-24","classical",.primary,"classical.summary",.challenge,"《王戎不取道旁李》中王戎判断李子是苦的，依据是？",["树长在路边却果实繁多，若是甜李早被摘光","李子的颜色发青","他曾经尝过一颗","别人事先告诉了他"],0,"由“道旁”与“多子”推出“必苦”，是典型推理。"),
+        q("sup3-j-19","classical",.middle,"classical.summary",.foundation,"《陋室铭》的中心句是？",["斯是陋室，惟吾德馨","山不在高，有仙则名","苔痕上阶绿，草色入帘青","南阳诸葛庐，西蜀子云亭"],0,"“惟吾德馨”一句统摄全篇，是全文主旨所在。"),
+        q("sup3-j-20","classical",.middle,"classical.summary",.challenge,"《记承天寺夜游》中作者自称“闲人”，其含义是？",["既有赏月的闲情雅致，又含被贬的淡淡自嘲","指没有工作的人","指喜欢安静的人","指夜里睡不着的人"],0,"“闲”字兼有清闲与失意两层意味，是全文的关键。"),
+        // 文言文 · 虚词（初中 2）
+        q("sup3-j-21","classical",.middle,"classical.function",.challenge,"“予独爱莲之出淤泥而不染”中“之”的作用是？",["取消句子独立性，不译","代词，指莲","结构助词，相当于“的”","动词，意为“去”"],0,"主谓之间的“之”取消句子独立性，无需译出。"),
+        q("sup3-j-22","classical",.middle,"classical.function",.developing,"“学而不思则罔”中的“而”表示什么关系？",["转折","并列","承接","修饰"],0,"学与思未能结合，句意转折，相当于“却”。"),
+        // 文言文 · 特殊句式（初中 2）
+        q("sup3-j-23","classical",.middle,"classical.sentence",.challenge,"“微斯人，吾谁与归”属于哪种特殊句式？",["宾语前置，疑问代词“谁”作宾语前置","定语后置","状语后置","被动句"],0,"疑问代词作宾语时要前置，正常语序为“吾与谁归”。"),
+        q("sup3-j-24","classical",.middle,"classical.sentence",.developing,"“见渔人，乃大惊”一句省略了什么成分？",["主语（村中人）","谓语","宾语","状语"],0,"承前省略主语，看见渔人而吃惊的是村中人。"),
+        // 文言文 · 翻译（初中 2）
+        q("sup3-j-25","classical",.middle,"classical.translation",.challenge,"“先天下之忧而忧，后天下之乐而乐”应译为？",["在天下人忧虑之前先忧虑，在天下人快乐之后才快乐","先为天下担忧，再为天下享乐","天下的忧愁与快乐都要亲身经历","比天下人更早忧虑，也更早快乐"],0,"两个“先”“后”都表时间次序，突出以天下为己任的襟怀。"),
+        q("sup3-j-26","classical",.middle,"classical.translation",.developing,"文言翻译的基本原则是？",["直译为主、字字落实，必要时调整语序","意译为主、可以自由发挥","只翻译实词即可","只要说出大意即可"],0,"先落实每个词，再按现代汉语习惯调顺语序。"),
+        // 文言文 · 写法与主旨（初中 2）
+        q("sup3-j-27","classical",.middle,"classical.appreciation",.challenge,"《岳阳楼记》先写“淫雨霏霏”再写“春和景明”，作用是？",["一悲一喜形成对比，引出更高的境界","依次描写四季景色","说明岳阳楼的地理位置","介绍当地的气候特点"],0,"两种景象引出两种心情，再翻出“不以物喜，不以己悲”。"),
+        q("sup3-j-28","classical",.middle,"classical.appreciation",.developing,"《陋室铭》结尾引“孔子云：何陋之有”，用意是？",["借圣人之言作结，强调德馨则陋室不陋","说明孔子曾住过陋室","引出下文的描写","表示作者自己尚有疑问"],0,"引经典收束，是为了把主旨再提高一层。"),
+        // 古诗词 · 意象与画面（小学 2 / 初中 2）
+        q("sup3-p-25","poetry",.primary,"poetry.imagery",.foundation,"“两个黄鹂鸣翠柳，一行白鹭上青天”中的主要意象是？",["黄鹂、翠柳、白鹭、青天","只有黄鹂和翠柳","只有白鹭和青天","只有柳树和天空"],0,"四个意象并置，构成明丽的春日画面。"),
+        q("sup3-p-26","poetry",.primary,"poetry.imagery",.developing,"“孤帆远影碧空尽，唯见长江天际流”的画面特点是？",["辽阔悠远，含着久久凝望的别情","热闹繁华","萧瑟荒凉","急促紧张"],0,"视线随孤帆远去，画面越远，别情越长。"),
+        q("sup3-j-29","poetry",.middle,"poetry.imagery",.foundation,"“大漠孤烟直，长河落日圆”营造出的画面是？",["雄浑壮阔的边塞景象","凄凉破败的战场","繁忙喧闹的渡口","幽静深邃的山林"],0,"大、孤、直、长、圆几个字共同撑起辽阔的边塞感。"),
+        q("sup3-j-30","poetry",.middle,"poetry.imagery",.challenge,"“枯藤老树昏鸦，小桥流水人家”在写景上的特点是？",["意象并列，白描中见萧瑟与温情的对照","使用比喻","使用夸张","通篇议论"],0,"名词意象直接并置，不加连接却自成画面。"),
+        // 古诗词 · 炼字炼句（小学 2 / 初中 2）
+        q("sup3-p-27","poetry",.primary,"poetry.word",.foundation,"“春风吹又生”中的“生”字写出了野草的？",["顽强的生命力","生长速度","颜色","高度"],0,"一个“生”字写尽野火烧不尽的生命力。"),
+        q("sup3-p-28","poetry",.primary,"poetry.word",.challenge,"“春风又绿江南岸”中“绿”字的妙处是？",["形容词作动词，写出春风带来的勃勃生机","说明江水本身是绿色的","说明岸边长满了绿草","说明春风是绿色的"],0,"“绿”字带出动态，把看不见的春风写成可见的颜色。"),
+        q("sup3-j-31","poetry",.middle,"poetry.word",.challenge,"“感时花溅泪，恨别鸟惊心”中“溅”“惊”二字的表达效果是？",["移情于物，把花、鸟人格化以写尽忧国之痛","写花瓣上沾着露水","写鸟儿受惊飞走","写春天景色的美丽"],0,"诗人把自己的悲痛移到花、鸟身上，更显沉痛。"),
+        q("sup3-j-32","poetry",.middle,"poetry.word",.challenge,"“采菊东篱下，悠然见南山”中的“见”能否改为“望”？",["不能，“见”是无意间映入眼帘，更显悠然","能，两个字意思完全相同","不能，因为“望”字更押韵","能，“望”字表达得更清楚"],0,"“见”出于无意，正合“悠然”；“望”则有意为之。"),
+        // 古诗词 · 表达技巧（小学 2 / 初中 2）
+        q("sup3-p-29","poetry",.primary,"poetry.technique",.foundation,"“飞流直下三千尺，疑是银河落九天”主要运用了？",["夸张与比喻","拟人与排比","反问与设问","借代与反复"],0,"三千尺是夸张，银河是比喻，二者结合写瀑布。"),
+        q("sup3-p-30","poetry",.primary,"poetry.technique",.developing,"“桃花潭水深千尺，不及汪伦送我情”运用的手法是？",["衬托，以潭水之深衬托友情更深","比喻，把友情比作潭水","夸张，写潭水非常深","拟人，把潭水写得像人"],0,"先言潭水之深，再以“不及”反衬情谊之厚。"),
+        q("sup3-j-33","poetry",.middle,"poetry.technique",.developing,"“乡书何处达？归雁洛阳边”运用的写法是？",["设问并借归雁传书，表达思乡之情","反问，加强语气","用典，借用前人典故","对比，写古今之变"],0,"自问自答是设问，托雁传书是传统的寄情方式。"),
+        q("sup3-j-34","poetry",.middle,"poetry.technique",.challenge,"“沉舟侧畔千帆过，病树前头万木春”的写法与含义是？",["比喻，借新陈代谢的景象表达豁达进取","白描，只写江上所见","夸张，写船多树多","用典，化用前人诗句"],0,"以沉舟、病树自比，却从千帆、万木中见出生机。"),
+        // 古诗词 · 思想感情（小学 2 / 初中 2）
+        q("sup3-p-31","poetry",.primary,"poetry.emotion",.foundation,"“独在异乡为异客，每逢佳节倍思亲”表达的情感是？",["节日里倍加浓烈的思乡念亲之情","对节日热闹场面的喜爱","对异乡风光的欣赏","对旅途劳顿的抱怨"],0,"“异客”与“倍思亲”直接点出节日里的思亲之切。"),
+        q("sup3-p-32","poetry",.primary,"poetry.emotion",.developing,"“儿童散学归来早，忙趁东风放纸鸢”表达的情感是？",["对春光与童趣的喜爱","对读书的厌倦","对东风的畏惧","对故乡的思念"],0,"归早、趁风、放鸢，写的是春日里的快活。"),
+        q("sup3-j-35","poetry",.middle,"poetry.emotion",.developing,"“会当凌绝顶，一览众山小”抒发了诗人怎样的情感？",["不怕困难、俯视一切的雄心与豪情","登高望远的闲适","对山路崎岖的抱怨","对友人的思念"],0,"“会当”是决心，“一览众山小”是胸襟。"),
+        q("sup3-j-36","poetry",.middle,"poetry.emotion",.developing,"“但愿人长久，千里共婵娟”表达的是？",["对亲人的美好祝愿与旷达胸怀","对月夜景色的赞美","被贬谪后的愤懑","对战争的忧虑"],0,"由个人离别推及人间共愿，是旷达的祝愿。"),
+        // 考场作文 · 审题与选材（小学 2 / 初中 2）
+        q("sup3-p-33","writing",.primary,"writing.topic",.foundation,"写《一次难忘的尝试》，选材最合适的是？",["第一次独自坐公交车去外婆家","我的一天","我的妈妈","读书的好处"],0,"“尝试”要求写出第一次做某事的过程与感受。"),
+        q("sup3-p-34","writing",.primary,"writing.topic",.developing,"审题时首先要弄清楚的是？",["写作对象、范围与重点","文章要写多少字","用哪种修辞手法","用第几人称"],0,"对象、范围、重点，是审题的三个要点。"),
+        q("sup3-j-37","writing",.middle,"writing.topic",.challenge,"命题作文《这也是一种力量》中的“也”字提示？",["要写看似平常却蕴含力量的人和事","要写非常强大的事物","必须写成议论文","必须写成寓言"],0,"“也”意味着转换视角，从寻常处发现力量。"),
+        q("sup3-j-38","writing",.middle,"writing.topic",.developing,"材料作文审题的关键一步是？",["找准材料的核心词与命题意图","把材料原文抄进作文","找出最长的那一句","先确定使用哪种修辞"],0,"抓住核心词，立意才不会跑偏。"),
+        // 考场作文 · 细节描写（小学 2 / 初中 2）
+        q("sup3-p-35","writing",.primary,"writing.detail",.developing,"要把“妈妈很辛苦”写具体，最好的做法是？",["写她深夜还在灯下为我缝纽扣的动作与神态","反复写“妈妈真辛苦”","写清楚妈妈的姓名","介绍家里有几口人"],0,"具体的动作和神态，比反复感叹更有力量。"),
+        q("sup3-p-36","writing",.primary,"writing.detail",.developing,"描写人物动作时，最重要的是？",["把动作拆解成一连串具体动作","多用形容词","把动作写得很长","先写明动作发生的时间"],0,"分解动作，画面才连贯、可感。"),
+        q("sup3-j-39","writing",.middle,"writing.detail",.developing,"细节描写的主要作用是？",["使内容具体可感，突出人物或主题","增加文章的篇幅","展示作者的词汇量","代替情节安排"],0,"细节服务于人物与主题，不是装饰。"),
+        q("sup3-j-40","writing",.middle,"writing.detail",.challenge,"写“等待”时的焦急，最细腻的是？",["反复看表、来回踱步、听到脚步声就张望","我很着急","时间过得很慢","我等了很久"],0,"用可观察的行为代替抽象的心理概括。"),
+        // 考场作文 · 结构与首尾（小学 2 / 初中 2）
+        q("sup3-p-37","writing",.primary,"writing.structure",.foundation,"记叙文开头写“那天的雨下得很大”，最可能的作用是？",["交代环境并为下文情节作铺垫","说明当天的天气","介绍主要人物","总结全文内容"],0,"开头的环境描写通常兼有交代与铺垫两重作用。"),
+        q("sup3-p-38","writing",.primary,"writing.structure",.developing,"一篇写“学骑车”的作文，结尾最好？",["写出收获或感悟，并回应题目","戛然而止不作收束","再补一段环境描写","提出问题而不作回答"],0,"结尾要点明收获，并回扣题目。"),
+        q("sup3-j-41","writing",.middle,"writing.structure",.developing,"记叙文中穿插一段回忆，这种叙述方式是？",["插叙","顺叙","倒叙","补叙"],0,"在顺叙过程中插入相关片段，属于插叙。"),
+        q("sup3-j-42","writing",.middle,"writing.structure",.developing,"安排文章层次时，过渡句的作用是？",["承上启下，使衔接自然","增加抒情色彩","引出人物对话","交代时间地点"],0,"过渡句负责把前后内容接顺。"),
+        // 考场作文 · 应用文写作（小学 2 / 初中 2）
+        q("sup3-p-39","writing",.primary,"writing.application",.foundation,"写《给远方朋友的一封信》，正文开头应先？",["问候对方，并说明写信的缘由","直接提出自己的要求","描写当地的天气","介绍学校的历史"],0,"书信开头先问候，再说明为什么写这封信。"),
+        q("sup3-p-40","writing",.primary,"writing.application",.foundation,"写“通知”时，落款处应写清？",["发出通知的单位或个人以及日期","收通知人的姓名","当天的天气情况","活动感想"],0,"落款标明发文者与日期，通知才有效力。"),
+        q("sup3-j-43","writing",.middle,"writing.application",.developing,"写演讲稿，开头最重要的是？",["称呼得体，并尽快点明话题以抓住听众","作长篇的自我介绍","罗列大量数据","先讲一个笑话暖场"],0,"演讲开头要迅速建立与听众的联系。"),
+        q("sup3-j-44","writing",.middle,"writing.application",.developing,"写“倡议书”，正文部分最重要的是？",["说明倡议的背景、内容与具体要求","介绍自己的经历","抒发强烈的感情","描写周围环境"],0,"倡议书要让读者知道做什么、怎么做。"),
+        // 考场作文 · 语言升格与修改（小学 3）
+        q("sup3-p-41","writing",.primary,"writing.language",.foundation,"把“教室里很安静”写得更生动，可改为？",["教室里静得连一根针掉在地上都能听见","教室里非常安静","教室里没有一点声音","大家都不说话"],0,"夸张能放大感受，让“安静”变得可感。"),
+        q("sup3-p-42","writing",.primary,"writing.language",.developing,"“我看见了他高兴的笑声”这句话的毛病是？",["搭配不当，笑声不能被“看见”","用词不够华丽","缺少标点符号","语序混乱"],0,"“看见”与“笑声”不搭配，应改为“听见”。"),
+        q("sup3-p-43","writing",.primary,"writing.language",.challenge,"修改时发现一段内容与中心无关，应该？",["删去或压缩","保留并加以扩写","移到文章结尾","改写成人物对话"],0,"与中心无关的内容要舍得删。"),
+        // 考场作文 · 材料立意与论证（初中 2）
+        q("sup3-j-45","writing",.middle,"writing.argument",.foundation,"议论文的论点应当具备的特点是？",["正确、鲜明、有针对性","新奇、出人意料","含蓄、委婉","口语化、生活化"],0,"论点要经得起检验，还要说得清楚明白。"),
+        q("sup3-j-46","writing",.middle,"writing.argument",.developing,"议论文中使用对比论证，作用是？",["突出事物差异，使观点更鲜明","增加文章的文采","延长文章篇幅","引出事实论据"],0,"两相对照，是非优劣自然显现。"),
+        // 综合性学习 · 图表解读（小学 2 / 初中 2）
+        q("sup3-p-44","integrated",.primary,"integrated.chart",.developing,"与扇形统计图相比，条形统计图更适合？",["比较不同类别数量的多少","表示各部分占整体的比例","表示随时间的变化趋势","表示地理位置"],0,"条形图便于横向比较数量的多少。"),
+        q("sup3-p-45","integrated",.primary,"integrated.chart",.developing,"看图得出结论时，应该？",["依据图中数据，不添加图外信息","凭生活经验推测","只写最大的那个数据","按个人喜好表述"],0,"结论必须从图中的数据来，不能想当然。"),
+        q("sup3-j-47","integrated",.middle,"integrated.chart",.developing,"统计图标题为“某校学生每周课外阅读时间”，结论应紧扣？",["标题所指的对象与数据的变化趋势","课外阅读的重要性","学校的硬件条件","考试制度的改革"],0,"结论要回答标题提出的问题，不能游移。"),
+        q("sup3-j-48","integrated",.middle,"integrated.chart",.challenge,"图表与文字材料同时出现时，探究应当？",["图文互证，把数据变化与文字说明结合起来","只描述图表内容","只抄录文字材料","跳过图表不读"],0,"图文互补，结论才更完整可靠。"),
+        // 综合性学习 · 标语·对联·徽标（小学 2 / 初中 2）
+        q("sup3-p-46","integrated",.primary,"integrated.slogan",.developing,"为“校园读书节”拟标语，恰当的一项是？",["与经典同行，打好人生底色","读书节开始了","大家快来参加","学校举办活动"],0,"既点明读书主题，又写出意义，简洁有力。"),
+        q("sup3-p-47","integrated",.primary,"integrated.slogan",.developing,"标语“小草微微笑，请你绕一绕”好在哪里？",["用拟人的方式委婉提示，亲切易被接受","说明小草真的会笑","语气强硬有力","字数比较多"],0,"把劝阻变成小草的请求，更容易被接受。"),
+        q("sup3-j-49","integrated",.middle,"integrated.slogan",.developing,"为“垃圾分类”设计宣传语，最有效的是？",["垃圾分一分，校园美十分","请注意垃圾分类","垃圾需要分类","分类非常重要"],0,"押韵、对仗，并写出行动与结果的关联。"),
+        q("sup3-j-50","integrated",.middle,"integrated.slogan",.challenge,"评价一则宣传语，首要标准是？",["主题突出、简洁易记、有号召力","上下句字数是否相等","是否使用对偶","是否出现品牌名称"],0,"宣传语要让人一听就懂、一记就牢。"),
+        // 综合性学习 · 病句与标点（小学 2 / 初中 2）
+        q("sup3-p-48","integrated",.primary,"integrated.language",.developing,"“他基本上把作业全部做完了”的病因是？",["前后矛盾，“基本上”与“全部”冲突","用词不当","成分残缺","语序不当"],0,"两个表示范围的词语互相抵触，删去其一。"),
+        q("sup3-p-49","integrated",.primary,"integrated.language",.challenge,"“通过这次活动，使我明白了团结的重要。”这句的病因是？",["缺少主语，“通过”与“使”并用","搭配不当","重复啰嗦","语序不当"],0,"介词结构掩盖了主语，删去“通过”或“使”之一。"),
+        q("sup3-j-51","integrated",.middle,"integrated.language",.challenge,"下列句子没有语病的是？",["经过讨论，大家一致同意这个方案","为了防止不再发生事故，学校加强了管理","他的写作水平明显改进了","我们要发扬和继承优良传统"],0,"B 否定不当，C 搭配不当，D 语序应为“继承和发扬”。"),
+        q("sup3-j-52","integrated",.middle,"integrated.language",.developing,"“他的成绩不仅在班里名列前茅，而且在年级也很突出”属于？",["递进复句，语序合理","并列复句","转折复句","因果复句"],0,"“不仅……而且……”表递进，范围由小到大。"),
+        // 综合性学习 · 口语交际与采访（小学 3）
+        q("sup3-p-50","integrated",.primary,"integrated.oral",.developing,"采访中希望对方多谈一些，可以？",["追问“能具体说说吗”","连续提出是非法问题","打断对方的话","自己作长篇讲述"],0,"开放式追问能让对方展开细节。"),
+        q("sup3-p-51","integrated",.primary,"integrated.oral",.developing,"与同学意见不同时，得体的表达是？",["先肯定对方的合理之处，再说明理由","直接否定对方的看法","沉默不予回应","请老师来评判对错"],0,"先接纳再补充，交流才能继续下去。"),
+        q("sup3-p-52","integrated",.primary,"integrated.oral",.foundation,"在班会上发言，声音和语速应该？",["响亮清楚、语速适中","越快越好","越小越好","随意变化"],0,"让人听得清、跟得上，是发言的基本要求。"),
+        // 综合性学习 · 新闻与标题（小学 3）
+        q("sup3-p-53","integrated",.primary,"integrated.news",.developing,"新闻正文通常按什么结构安排？",["重要性递减的“倒金字塔”结构","严格的时间先后顺序","空间转换顺序","与事情发展相反的顺序"],0,"最重要的信息放在最前面，便于快速获取。"),
+        q("sup3-p-54","integrated",.primary,"integrated.news",.developing,"拟写新闻标题最重要的要求是？",["准确概括最主要的事实","必须使用比喻","字数尽量多一些","抒发作者的感情"],0,"标题是新闻的眼睛，首先要求准确。"),
+        q("sup3-p-55","integrated",.primary,"integrated.news",.challenge,"消息与通讯的主要区别是？",["消息更简短、更重时效，通讯更详细、更重描写","消息只能写人，通讯只能写事","消息必须用第一人称","两者没有区别"],0,"消息求快求简，通讯求深求细。"),
+        // 综合性学习 · 活动方案与通知（小学 3）
+        q("sup3-p-56","integrated",.primary,"integrated.activity",.developing,"设计“走进敬老院”活动，第一步应是？",["明确活动目的，并与对方联系确定时间","直接集合出发","先写好活动总结","先采购礼品"],0,"先定目的与安排，活动才有依据。"),
+        q("sup3-p-57","integrated",.primary,"integrated.activity",.developing,"活动分工时主要应当考虑？",["按同学的兴趣与特长分配任务","让所有人做同一件事","全部交由老师承担","用抽签决定"],0,"各尽所长，合作才有效率。"),
+        q("sup3-p-58","integrated",.primary,"integrated.activity",.foundation,"写活动通知时，语言应当？",["简明准确，要素齐全","生动抒情","多用修辞手法","篇幅越长越好"],0,"通知以求实为要，把要素说清楚即可。"),
+        // 综合性学习 · 材料探究与跨文本（初中 2）
+        q("sup3-j-53","integrated",.middle,"integrated.material",.developing,"多则材料探究的常用步骤是？",["分别概括—比较异同—提炼结论","只读懂第一则材料","把几则材料拼接成一段","只找其中相同的句子"],0,"先读懂各自，再作比较，最后才下结论。"),
+        q("sup3-j-54","integrated",.middle,"integrated.material",.challenge,"从材料得出结论之后，还应注意？",["结论须有材料支撑，不作过度推断","尽量升华到人生哲理","加入个人情绪","结论写得越长越好"],0,"结论的范围不能超过材料所能支撑的范围。")
     ]
 }

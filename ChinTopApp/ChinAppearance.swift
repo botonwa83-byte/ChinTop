@@ -53,13 +53,7 @@ struct ChinFeatureView: View {
                             ForEach(ChinAppearancePreference.allCases) { pref in Label(pref.label, systemImage: pref.icon).tag(pref) }
                         }.pickerStyle(.navigationLink)
                     }.padding().background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: ChinRadius.inner))
-                    VStack(alignment: .leading, spacing: 12) {
-                        Label("关于与协议", systemImage: "doc.text").font(.headline).foregroundStyle(.secondary)
-                        ChinLegalLinksView()
-                        Text("ChinTop · 语文登顶 v1.0.0")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }.padding().background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: ChinRadius.inner))
+                    aboutSection
                 }.padding().frame(maxWidth: 760, alignment: .leading)
             }.navigationTitle("功能").sheet(isPresented: $showPaywall) { ChinPaywallView() }
         }
@@ -73,6 +67,36 @@ struct ChinFeatureView: View {
             }.padding().background(LinearGradient(colors: [.orange, .pink], startPoint: .leading, endPoint: .trailing), in: RoundedRectangle(cornerRadius: ChinRadius.panel))
         }.buttonStyle(.plain)
     }
+    /// 「关于」区块：与 MathTop「我的 · 关于」保持同一套版式
+    /// —— 区块标题 + 内容统计行 + 分隔线 + 协议链接 + 版本署名。
+    private var aboutSection: some View {
+        VStack(alignment: .leading, spacing: ChinSpacing.md) {
+            Label("关于", systemImage: "info.circle").font(.headline).foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: ChinSpacing.sm) {
+                aboutRow("知识点总数", "\(ChinQuestionBank.knowledgePointCatalog.count) 个")
+                aboutRow("配套练习总数", "\(ChinQuestionBank.all.count) 道")
+                aboutRow("每个知识点配套题量", "不少于 \(ChinQuestionBank.targetCount(importance: .extension)) 道")
+                aboutRow("学习活动库", "\(ChinDailyTaskCatalog.all.count) 个每日任务")
+            }
+            Divider()
+            ChinLegalLinksView()
+            Text("ChinTop · 语文登顶  v1.0.0\n© 2026 Top King. All rights reserved.")
+                .font(ChinFont.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .chinCardSurface()
+    }
+
+    private func aboutRow(_ title: String, _ value: String) -> some View {
+        HStack {
+            Text(title).font(ChinFont.body).foregroundStyle(.secondary)
+            Spacer(minLength: ChinSpacing.sm)
+            Text(value).font(ChinFont.body).bold().foregroundStyle(.primary)
+        }
+    }
+
     private func featureSection<Content: View>(_ title: String, _ icon: String, _ color: Color, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 10) { Label(title, systemImage: icon).font(.headline).foregroundStyle(color); VStack(spacing: 10) { content() } }
     }

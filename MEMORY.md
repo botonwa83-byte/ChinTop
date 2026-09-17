@@ -71,9 +71,11 @@
 
 ### 分学段题库（2026-09-11 重做并按权重扩充）
 
-- `ChinQuestionBank` 持有 307 道人工编写题目：首批 120 道（小学 60、初中 60）+ 按权重三批填充 67 道 + 第四轮均衡扩充 120 道（每个模块×学段区块 +12）；模板生成器与旧 `ChinLegacyQuestionBank` 死代码已删除。
+- `ChinQuestionBank` 持有 535 道人工编写题目（小学 258、初中 277）：首批 120 道（小学 60、初中 60）+ 按权重三批填充 67 道 + 第四轮均衡扩充 120 道（每个模块×学段区块 +12）；模板生成器与旧 `ChinLegacyQuestionBank` 死代码已删除。
 - 权重模型：每个知识点在其覆盖学段内 core ≥ 4、supporting ≥ 3、extension ≥ 2（`ChinQuestionBank.targetCount(importance:)`），测试按权重断言，后续加题不受固定配额限制。
 - 填充批次：批 1 阅读+文言 29、批 2 古诗词+作文 24、批 3 综合 14；批 4 阅读+文言 48、批 5 古诗词+作文 48、批 6 综合 24。
+- 批 9（2026-09-14）按权重查缺补漏：小学 26、初中 38；批 10（2026-09-17）按知识点均衡扩容 +112（小学 58、初中 54）：两学段知识点各 +4、小学专属 +3、初中专属 +2，33 个知识点全部加厚。
+- 加题硬约束（测试守护）：ID 唯一、题干唯一、选项互不相同、来源不含"真题/名校/官方题库/押题"。写新题前先跑一遍查重，名句型考点极易与旧题撞车。
 - 知识点目录 33 个细粒度知识点（含学段覆盖声明），是模块"覆盖知识点"与练习筛选器的唯一数据源；`ChinModule.points` 重复清单已移除。
 - 每题有稳定 ID（`primary-reading-01` 式）、知识点 ID、重要性、难度、来源（统一"本地精选练习 · 来源待核验"）。
 - 能力映射改为知识点 ID 表驱动（`ChinCapability.capabilityID(knowledgePointID:moduleID:skill:)`），旧数据无知识点 ID 时回退中文关键词匹配。
@@ -87,8 +89,9 @@
 swift test
 ```
 
-- 26 项测试通过，0 failures。
+- `ChinQuestionBankTests` 13 项全通过（新增 112 题后仍全绿）。
 - 覆盖权重题量、题干唯一、选项去重、知识点-学段覆盖、来源诚信标注、能力映射有效性、错题元数据落库重载、旧快照（缺 `completedTaskKeys`/题目元数据）解码、方法卡关联、成长报告、跨周计划。
+- 已知非本次引入的失败：`ChinLearningCoreTests` 中 2 个持久化用例（`testCompletedTaskAndPortfolioSurviveRepositoryReload`、`testNewMistakeRecordPersistsQuestionMetadataAndSurvivesReload`）在 `swift test`（macOS 目标）下共 12 条断言失败；用 `git stash` 回退题库改动后同样失败，属既有问题，待有 iOS 环境时复核。
 
 Catalyst 编译已通过：
 
@@ -155,7 +158,7 @@ xcodegen generate
 
 ## 明天建议启动顺序
 
-1. 先运行 `swift test`，确认基线仍为全绿（当前 25 项）。
+1. 先运行 `swift test`，确认 `ChinQuestionBankTests` 全绿（13 项），并留意 `ChinLearningCoreTests` 的既有失败。
 2. 有 iOS Simulator runtime 或真机后优先做 P0-1 的真实 UI 验收。
 3. 题库发布前做 P0-2 的逐题第三方审校。
 4. 每个新增行为遵循 TDD：先写失败测试，再写最小实现，再跑完整测试。
@@ -164,7 +167,7 @@ xcodegen generate
 ## 关键文件
 
 - 核心模型与业务逻辑：[ChinLearningCore.swift](ChinTopApp/Core/ChinLearningCore.swift)
-- 题库数据层（120 题 + 知识点目录）：[ChinQuestionBank.swift](ChinTopApp/Core/ChinQuestionBank.swift)
+- 题库数据层（535 题 + 33 个知识点目录）：[ChinQuestionBank.swift](ChinTopApp/Core/ChinQuestionBank.swift)
 - 学习状态管理：[ChinLearningStore.swift](ChinTopApp/ChinLearningStore.swift)
 - 学习相关界面：[ChinLearningViews.swift](ChinTopApp/ChinLearningViews.swift)
 - 专题模块与练习界面：[ChinContent.swift](ChinTopApp/ChinContent.swift)

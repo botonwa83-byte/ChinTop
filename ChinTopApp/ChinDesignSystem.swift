@@ -6,14 +6,22 @@ enum ChinSpacing {
     static let xs: CGFloat = 4
     static let sm: CGFloat = 8
     static let md: CGFloat = 12
+    /// 输入框 / 表单行内边距
+    static let field: CGFloat = 14
     static let lg: CGFloat = 16
     static let xl: CGFloat = 20
+    /// 页面左右留白
+    static let page: CGFloat = 24
     static let xxl: CGFloat = 28
 }
 
 enum ChinRadius {
     static let chip: CGFloat = 8
+    /// 标签 / 胶囊（输入框描边、小标签）
+    static let pill: CGFloat = 10
     static let inner: CGFloat = 12
+    /// 面板 / 内嵌区块
+    static let panel: CGFloat = 14
     static let card: CGFloat = 16
     static let hero: CGFloat = 20
 }
@@ -26,6 +34,13 @@ enum ChinFont {
     static func bigStat(_ size: CGFloat = 22) -> Font {
         .system(size: size, weight: .bold, design: .rounded)
     }
+
+    // MARK: 品牌页专用字阶（PromoView）
+    static let promoGlyph = Font.system(size: 46, weight: .bold)
+    static let promoLogo = Font.system(size: 42)
+    static let promoHeadline = Font.system(size: 34)
+    static let promoBrand = Font.system(size: 30, weight: .heavy, design: .rounded)
+    static let promoQuote = Font.system(size: 24, weight: .black, design: .serif)
 }
 
 extension Color {

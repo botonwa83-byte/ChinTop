@@ -625,6 +625,9 @@ public struct ChinLearningSnapshot: Codable, Equatable {
     public var practiceCount: Int
     public var correctCount: Int
     public var activityDates: [String]
+    /// 知识点 ID → 已练题数。用于在学习路径上标出"学到第几步、哪一步练过"。
+    /// 新增字段：旧存档没有此键时按空解码，不影响老用户数据。
+    public var knowledgePointProgress: [String: Int]
 
     public init(
         gradeID: String = ChinGradeLevel.middle.rawValue,
@@ -634,7 +637,8 @@ public struct ChinLearningSnapshot: Codable, Equatable {
         mistakes: [ChinMistakeRecord] = [],
         practiceCount: Int = 0,
         correctCount: Int = 0,
-        activityDates: [String] = []
+        activityDates: [String] = [],
+        knowledgePointProgress: [String: Int] = [:]
     ) {
         self.gradeID = gradeID
         self.completedTaskIDs = completedTaskIDs
@@ -644,6 +648,7 @@ public struct ChinLearningSnapshot: Codable, Equatable {
         self.practiceCount = practiceCount
         self.correctCount = correctCount
         self.activityDates = activityDates
+        self.knowledgePointProgress = knowledgePointProgress
     }
 
     private enum CodingKeys: String, CodingKey {
@@ -655,6 +660,7 @@ public struct ChinLearningSnapshot: Codable, Equatable {
         case practiceCount
         case correctCount
         case activityDates
+        case knowledgePointProgress
     }
 
     public init(from decoder: Decoder) throws {
@@ -667,7 +673,8 @@ public struct ChinLearningSnapshot: Codable, Equatable {
             mistakes: try container.decodeIfPresent([ChinMistakeRecord].self, forKey: .mistakes) ?? [],
             practiceCount: try container.decodeIfPresent(Int.self, forKey: .practiceCount) ?? 0,
             correctCount: try container.decodeIfPresent(Int.self, forKey: .correctCount) ?? 0,
-            activityDates: try container.decodeIfPresent([String].self, forKey: .activityDates) ?? []
+            activityDates: try container.decodeIfPresent([String].self, forKey: .activityDates) ?? [],
+            knowledgePointProgress: try container.decodeIfPresent([String: Int].self, forKey: .knowledgePointProgress) ?? [:]
         )
     }
 
@@ -681,6 +688,7 @@ public struct ChinLearningSnapshot: Codable, Equatable {
         try container.encode(practiceCount, forKey: .practiceCount)
         try container.encode(correctCount, forKey: .correctCount)
         try container.encode(activityDates, forKey: .activityDates)
+        try container.encode(knowledgePointProgress, forKey: .knowledgePointProgress)
     }
 
     public var accuracy: Double {
@@ -758,6 +766,9 @@ public struct ChinLearningSnapshot: Codable, Equatable {
         practiceCount += 1
         if isCorrect {
             correctCount += 1
+        }
+        if let knowledgePointID {
+            knowledgePointProgress[knowledgePointID, default: 0] += 1
         }
         recordActivity(on: date, calendar: calendar)
 

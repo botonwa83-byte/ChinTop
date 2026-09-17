@@ -62,20 +62,31 @@ struct ModuleView: View {
         module.questionCount(grade: learning.grade)
     }
 
+    /// 本模块在当前学段的知识点，按学习路径排好顺序（学生照着序号往下练即可）。
+    private var orderedSteps: [ChinPathStep] {
+        ChinLearningPath.steps(for: learning.grade).filter { $0.moduleID == module.id }
+    }
+
     var body: some View {
         List {
             Section { Text(module.subtitle).foregroundStyle(.secondary) }
-            Section("能力任务") {
-                ForEach(tasks) { task in
+            Section("知识点 · 按顺序练") {
+                ForEach(orderedSteps) { step in
                     NavigationLink {
-                        ChinTaskView(task: task)
+                        ChinKnowledgePointPracticeView(step: step)
                     } label: {
-                        HStack(spacing: 12) {
-                            Image(systemName: ChinCapability.capability(for: task.capabilityID).icon)
-                                .foregroundStyle(.tint)
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(task.title).font(.headline)
-                                Text(task.method).font(.caption).foregroundStyle(.secondary)
+                        HStack(spacing: 10) {
+                            Text("\(step.order)")
+                                .font(.caption.weight(.bold))
+                                .foregroundStyle(.white)
+                                .frame(width: 24, height: 24)
+                                .background(Color.blue, in: Circle())
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(step.title).font(ChinFont.cardTitle)
+                                Text("\(step.brief) · \(step.questionCount) 题")
+                                    .font(ChinFont.caption)
+                                    .foregroundStyle(.secondary)
+                                    .lineLimit(2)
                             }
                         }
                     }
@@ -97,8 +108,21 @@ struct ModuleView: View {
                     }
                 }
             }
-            Section("覆盖知识点") {
-                ForEach(module.knowledgePoints(grade: learning.grade)) { point in Label(point.title, systemImage: "checkmark.circle") }
+            Section("能力任务 · 学完知识点再做") {
+                ForEach(tasks) { task in
+                    NavigationLink {
+                        ChinTaskView(task: task)
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: ChinCapability.capability(for: task.capabilityID).icon)
+                                .foregroundStyle(.tint)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(task.title).font(.headline)
+                                Text(task.method).font(.caption).foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
             }
             if !purchase.isUnlocked { Section { Button("解锁完整模块") { showPaywall = true }.buttonStyle(.borderedProminent) } }
         }
@@ -133,7 +157,7 @@ private struct PracticeListView: View {
     }
 }
 
-private struct ChinQuestionView: View {
+struct ChinQuestionView: View {
     let question: ChinPractice
     @EnvironmentObject private var learning: ChinLearningStore
     @State private var selected: String?
@@ -144,7 +168,7 @@ private struct ChinQuestionView: View {
         ScrollView { VStack(alignment: .leading, spacing: 16) {
             Text(question.point).font(.caption).foregroundStyle(.secondary)
             Text(question.prompt).font(.title3.bold())
-            ForEach(question.choices, id: \.self) { choice in Button { selected = choice } label: { HStack { Text(choice); Spacer(); if submitted && choice == question.answer { Image(systemName: "checkmark.circle.fill").foregroundStyle(.green) } }.padding().frame(maxWidth: .infinity, alignment: .leading).background(choiceBackground(choice), in: RoundedRectangle(cornerRadius: 10)) }.buttonStyle(.plain).disabled(submitted) }
+            ForEach(question.choices, id: \.self) { choice in Button { selected = choice } label: { HStack { Text(choice); Spacer(); if submitted && choice == question.answer { Image(systemName: "checkmark.circle.fill").foregroundStyle(.green) } }.padding().frame(maxWidth: .infinity, alignment: .leading).background(choiceBackground(choice), in: RoundedRectangle(cornerRadius: ChinRadius.pill)) }.buttonStyle(.plain).disabled(submitted) }
             if submitted {
                 VStack(alignment: .leading, spacing: 8) {
                     Label(selected == question.answer ? "回答正确" : "这题未答对", systemImage: selected == question.answer ? "checkmark.circle.fill" : "xmark.circle.fill")
@@ -158,7 +182,7 @@ private struct ChinQuestionView: View {
                 }
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background((selected == question.answer ? Color.green : Color.orange).opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
+                .background((selected == question.answer ? Color.green : Color.orange).opacity(0.12), in: RoundedRectangle(cornerRadius: ChinRadius.pill))
             }
             Button(submitted ? "再做一次" : "提交答案") {
                 if submitted {

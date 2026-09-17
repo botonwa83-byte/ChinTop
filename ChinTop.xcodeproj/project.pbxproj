@@ -14,16 +14,20 @@
 		1132639EC81775EE0ABD65D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD546BD38DA581DA0CB13C57 /* Assets.xcassets */; };
 		1EB81653CE3F66A77419F89D /* ChinPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E05A1059FC2CD1C2E25DB21 /* ChinPurchaseManager.swift */; };
 		2B77BBCDC67144CCEA73C000 /* ChinLearningCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788D21238E6417CF09918C13 /* ChinLearningCore.swift */; };
+		3214309E4B6BA3B218D53EFC /* ChinLearningPathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D272400CF8BD75551420D7EC /* ChinLearningPathTests.swift */; };
 		326EAD36A2C991A38EE4D227 /* ChinQuestionBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A540181B076519782E72681E /* ChinQuestionBank.swift */; };
+		3E843B82E479ED378539F668 /* ChinLearningPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC3A0B19D1BAAE29A801C88 /* ChinLearningPath.swift */; };
 		47C5CA0ADEAB3F1F988C491C /* ChinQuestionBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = A540181B076519782E72681E /* ChinQuestionBank.swift */; };
 		6571F6E19D00C32C202C2379 /* ChinTopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4256F5195BDED6C499DAA18A /* ChinTopApp.swift */; };
 		705C131EF0D93CB7FD7B0E61 /* ChinLegal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC99160F9A45A359E809724 /* ChinLegal.swift */; };
 		7A5E9E39248D949FCB6EF4B4 /* ChinAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C75DBB5A6AC6B4537197335 /* ChinAppearance.swift */; };
 		87958A11BD063AE19B0F8AF4 /* ChinDesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF67E032497FC35F381710D7 /* ChinDesignSystem.swift */; };
 		8D50FA61CD2B1883BF83E5A9 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = BA89DA1AC7B7861765BEF2CB /* PrivacyInfo.xcprivacy */; };
+		909B713BCEBCA805FE36A77E /* ChinLearningPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC3A0B19D1BAAE29A801C88 /* ChinLearningPath.swift */; };
 		92F7E6637670DDA14DF18829 /* ChinContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D541EF6569FEA5135132585 /* ChinContent.swift */; };
 		9F1F5257BD2F8F93E6C4E20D /* ChinQuestionBankTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277ADCE0ADBF2EE7D7176BF7 /* ChinQuestionBankTests.swift */; };
 		D4384AE72DAFCC4C7387F58B /* ChinPromoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CA4764969356D5396664C6 /* ChinPromoView.swift */; };
+		F320499AC98E2005FD30D448 /* ChinLearningPathViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996A98B5795D40EF1527F9EB /* ChinLearningPathViews.swift */; };
 		F536B11CB9BBACDAE0DB78F9 /* ChinLearningCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0694E99EEBA7400972CA97B1 /* ChinLearningCoreTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,17 +39,20 @@
 		277ADCE0ADBF2EE7D7176BF7 /* ChinQuestionBankTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinQuestionBankTests.swift; sourceTree = "<group>"; };
 		37862AC0ACB9806893DB4537 /* ChinLearningStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinLearningStore.swift; sourceTree = "<group>"; };
 		4256F5195BDED6C499DAA18A /* ChinTopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinTopApp.swift; sourceTree = "<group>"; };
-		5B79B027ACA79DD3367E57D3 /* ChinTopTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ChinTopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B79B027ACA79DD3367E57D3 /* ChinTopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChinTopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DC99160F9A45A359E809724 /* ChinLegal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinLegal.swift; sourceTree = "<group>"; };
 		5E05A1059FC2CD1C2E25DB21 /* ChinPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinPurchaseManager.swift; sourceTree = "<group>"; };
 		788D21238E6417CF09918C13 /* ChinLearningCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinLearningCore.swift; sourceTree = "<group>"; };
+		8EC3A0B19D1BAAE29A801C88 /* ChinLearningPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinLearningPath.swift; sourceTree = "<group>"; };
+		996A98B5795D40EF1527F9EB /* ChinLearningPathViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinLearningPathViews.swift; sourceTree = "<group>"; };
 		A540181B076519782E72681E /* ChinQuestionBank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinQuestionBank.swift; sourceTree = "<group>"; };
 		B5AA6529FAD1805D3B4BBCE5 /* ChinLearningViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinLearningViews.swift; sourceTree = "<group>"; };
-		BA89DA1AC7B7861765BEF2CB /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		BA89DA1AC7B7861765BEF2CB /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		BD546BD38DA581DA0CB13C57 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D272400CF8BD75551420D7EC /* ChinLearningPathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinLearningPathTests.swift; sourceTree = "<group>"; };
 		D3CA4764969356D5396664C6 /* ChinPromoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinPromoView.swift; sourceTree = "<group>"; };
 		EF67E032497FC35F381710D7 /* ChinDesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinDesignSystem.swift; sourceTree = "<group>"; };
-		FDF959C5695D1C36D36A61C8 /* ChinTop.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ChinTop.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FDF959C5695D1C36D36A61C8 /* ChinTop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChinTop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -53,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				0694E99EEBA7400972CA97B1 /* ChinLearningCoreTests.swift */,
+				D272400CF8BD75551420D7EC /* ChinLearningPathTests.swift */,
 				277ADCE0ADBF2EE7D7176BF7 /* ChinQuestionBankTests.swift */,
 			);
 			path = Tests;
@@ -73,6 +81,7 @@
 				0C75DBB5A6AC6B4537197335 /* ChinAppearance.swift */,
 				1D541EF6569FEA5135132585 /* ChinContent.swift */,
 				EF67E032497FC35F381710D7 /* ChinDesignSystem.swift */,
+				996A98B5795D40EF1527F9EB /* ChinLearningPathViews.swift */,
 				37862AC0ACB9806893DB4537 /* ChinLearningStore.swift */,
 				B5AA6529FAD1805D3B4BBCE5 /* ChinLearningViews.swift */,
 				5DC99160F9A45A359E809724 /* ChinLegal.swift */,
@@ -90,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				788D21238E6417CF09918C13 /* ChinLearningCore.swift */,
+				8EC3A0B19D1BAAE29A801C88 /* ChinLearningPath.swift */,
 				A540181B076519782E72681E /* ChinQuestionBank.swift */,
 			);
 			path = Core;
@@ -158,9 +168,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
+				LastUpgradeCheck = 2700;
 			};
 			buildConfigurationList = F0F75A9813E3D4C27CE98505 /* Build configuration list for PBXProject "ChinTop" */;
 			developmentRegion = en;
@@ -203,6 +211,8 @@
 				92F7E6637670DDA14DF18829 /* ChinContent.swift in Sources */,
 				87958A11BD063AE19B0F8AF4 /* ChinDesignSystem.swift in Sources */,
 				0D17691D0B6A0AB5F3743729 /* ChinLearningCore.swift in Sources */,
+				3E843B82E479ED378539F668 /* ChinLearningPath.swift in Sources */,
+				F320499AC98E2005FD30D448 /* ChinLearningPathViews.swift in Sources */,
 				094DA08DB1B27C456DC9073E /* ChinLearningStore.swift in Sources */,
 				064EFAB517F4F1FBC1BDB814 /* ChinLearningViews.swift in Sources */,
 				705C131EF0D93CB7FD7B0E61 /* ChinLegal.swift in Sources */,
@@ -220,6 +230,8 @@
 			files = (
 				2B77BBCDC67144CCEA73C000 /* ChinLearningCore.swift in Sources */,
 				F536B11CB9BBACDAE0DB78F9 /* ChinLearningCoreTests.swift in Sources */,
+				909B713BCEBCA805FE36A77E /* ChinLearningPath.swift in Sources */,
+				3214309E4B6BA3B218D53EFC /* ChinLearningPathTests.swift in Sources */,
 				47C5CA0ADEAB3F1F988C491C /* ChinQuestionBank.swift in Sources */,
 				9F1F5257BD2F8F93E6C4E20D /* ChinQuestionBankTests.swift in Sources */,
 			);
@@ -233,11 +245,13 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chintop.tests;
 				PRODUCT_NAME = ChinTopTests;
 				SDKROOT = iphoneos;
@@ -250,11 +264,13 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chintop.tests;
 				PRODUCT_NAME = ChinTopTests;
 				SDKROOT = iphoneos;
@@ -267,6 +283,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = Z7F8BY55DS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ChinTop;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -274,10 +291,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chintop.app;
 				PRODUCT_NAME = ChinTop;
 				SDKROOT = iphoneos;
@@ -325,6 +344,7 @@
 				DEVELOPMENT_LANGUAGE = "zh-Hans";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -347,6 +367,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -393,6 +414,7 @@
 				DEVELOPMENT_LANGUAGE = "zh-Hans";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -408,6 +430,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
@@ -420,6 +443,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = Z7F8BY55DS;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = ChinTop;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -427,10 +451,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chintop.app;
 				PRODUCT_NAME = ChinTop;
 				SDKROOT = iphoneos;

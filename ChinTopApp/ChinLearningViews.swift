@@ -23,14 +23,14 @@ struct ChinHomeView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: ChinSpacing.lg) {
                 header
-                dailyTask
                 gradePicker
+                learningPathCard
+                dailyTask
                 progressOverview
                 HStack(spacing: ChinSpacing.md) {
                     weeklyPlanLink
                     toolboxLink
                 }
-                capabilityRow
                 moduleRow
             }
             .padding(ChinSpacing.lg)
@@ -92,7 +92,7 @@ struct ChinHomeView: View {
                 Text(task.subtitle)
                     .font(ChinFont.body)
                     .foregroundStyle(.white.opacity(0.9))
-                Text(task.method)
+                Text(task.challenge)
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(.white)
 
@@ -170,40 +170,52 @@ struct ChinHomeView: View {
         .buttonStyle(.plain)
     }
 
-    private var capabilityRow: some View {
+    private var pathSteps: [ChinPathStep] { ChinLearningPath.steps(for: learning.grade) }
+
+    private var passedStepCount: Int { pathSteps.filter { learning.isKnowledgePointPassed($0.knowledgePointID) }.count }
+
+    /// 学习路径入口：直接告诉学生"下一步学什么、有多少题"，而不是先讲方法。
+    private var learningPathCard: some View {
         VStack(alignment: .leading, spacing: ChinSpacing.md) {
             HStack {
-                Text("能力地图").font(ChinFont.sectionTitle)
+                Text("\(learning.grade.title)学习路径").font(ChinFont.sectionTitle)
                 Spacer()
-                NavigationLink("全部能力") {
-                    ChinCapabilityMapView()
-                }
-                .font(ChinFont.body)
+                NavigationLink("全部 \(pathSteps.count) 步") { ChinLearningPathView() }
+                    .font(ChinFont.body)
             }
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: ChinSpacing.md) {
-                    ForEach(ChinCapability.all) { capability in
-                        NavigationLink {
-                            ChinCapabilityDetailView(capability: capability)
-                        } label: {
-                            VStack(alignment: .leading, spacing: 7) {
-                                Image(systemName: capability.icon)
-                                    .font(.title3)
-                                    .foregroundStyle(color(for: capability.colorName))
-                                Text(capability.title).font(ChinFont.cardTitle)
-                                Text("\(learning.capabilityActivityCount(capability.id)) 次作品")
-                                    .font(ChinFont.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                            .frame(width: 126, alignment: .leading)
-                            .chinCardSurface(padding: ChinSpacing.md)
+            if let step = learning.nextPathStep {
+                NavigationLink {
+                    ChinKnowledgePointPracticeView(step: step)
+                } label: {
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(spacing: 6) {
+                            Text("下一步 · 第 \(step.order) 步")
+                                .font(.caption.weight(.bold))
+                                .foregroundStyle(.blue)
+                            Spacer()
+                            Image(systemName: "arrow.up.right")
+                                .font(.caption.weight(.bold))
+                                .foregroundStyle(.tertiary)
                         }
-                        .buttonStyle(.plain)
+                        Text(step.title).font(ChinFont.cardTitle)
+                        Text(step.brief)
+                            .font(ChinFont.caption)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Text("\(step.questionCount) 道题 · 练完能拿下：\(step.goal)")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .padding(.vertical, 2)
+                .buttonStyle(.plain)
             }
+            ProgressView(value: Double(passedStepCount), total: Double(max(pathSteps.count, 1)))
+            Text("已过关 \(passedStepCount) / \(pathSteps.count) 个知识点 · 按顺序练，不用自己挑")
+                .font(ChinFont.caption)
+                .foregroundStyle(.secondary)
         }
+        .chinCardSurface()
     }
 
     private var toolboxLink: some View {
@@ -230,7 +242,7 @@ struct ChinHomeView: View {
 
     private var moduleRow: some View {
         VStack(alignment: .leading, spacing: ChinSpacing.sm) {
-            Text("选择一个专题继续").font(ChinFont.sectionTitle)
+            Text("按文体查找（想直接找某一类题时用）").font(ChinFont.sectionTitle)
             VStack(spacing: 0) {
                 ForEach(Array(ChinModule.all.enumerated()), id: \.element.id) { index, module in
                     Button { onSelectModule(module) } label: {
@@ -249,7 +261,7 @@ struct ChinHomeView: View {
                                 .font(.caption.weight(.bold))
                                 .foregroundStyle(.tertiary)
                         }
-                        .padding(.vertical, 10)
+                        .padding(.vertical, ChinSpacing.sm)
                     }
                     .buttonStyle(.plain)
                     if index < ChinModule.all.count - 1 {
@@ -314,7 +326,7 @@ struct ChinCapabilityMapView: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
-                    .padding(.vertical, 5)
+                    .padding(.vertical, ChinSpacing.xs)
                 }
             }
         }
@@ -457,7 +469,7 @@ struct ChinMethodCardRow: View {
                 .font(.title3)
                 .foregroundStyle(color(for: capability.colorName))
                 .frame(width: 36, height: 36)
-                .background(color(for: capability.colorName).opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
+                .background(color(for: capability.colorName).opacity(0.12), in: RoundedRectangle(cornerRadius: ChinRadius.chip))
             VStack(alignment: .leading, spacing: 4) {
                 Text(card.title).font(.headline)
                 Text(card.summary)
@@ -469,7 +481,7 @@ struct ChinMethodCardRow: View {
                     .foregroundStyle(.tint)
             }
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, ChinSpacing.xs)
     }
 
     private func color(for name: String) -> Color {
@@ -515,9 +527,9 @@ struct ChinMethodCardDetailView: View {
                         Label(step, systemImage: "\(index + 1).circle.fill")
                     }
                 }
-                .padding(16)
+                .padding(ChinSpacing.lg)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.orange.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
+                .background(Color.orange.opacity(0.1), in: RoundedRectangle(cornerRadius: ChinRadius.inner))
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("示例").font(.headline)
@@ -582,7 +594,7 @@ struct ChinLearningReportView: View {
             Text(report.headline)
                 .font(.headline)
                 .foregroundStyle(.tint)
-                .padding(.top, 4)
+                .padding(.top, ChinSpacing.xs)
         }
     }
 
@@ -596,8 +608,8 @@ struct ChinLearningReportView: View {
             Divider().frame(height: 42)
             ChinMetric(value: report.accuracyPercent.map { "\($0)%" } ?? "—", label: "练习正确率", icon: "target", color: .green)
         }
-        .padding(16)
-        .background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
+        .padding(ChinSpacing.lg)
+        .background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: ChinRadius.inner))
     }
 
     @ViewBuilder
@@ -615,9 +627,9 @@ struct ChinLearningReportView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            .padding(16)
+            .padding(ChinSpacing.lg)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.orange.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
+            .background(Color.orange.opacity(0.1), in: RoundedRectangle(cornerRadius: ChinRadius.inner))
         }
     }
 
@@ -638,9 +650,9 @@ struct ChinLearningReportView: View {
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
-        .padding(14)
+        .padding(ChinSpacing.field)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.blue.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
+        .background(Color.blue.opacity(0.08), in: RoundedRectangle(cornerRadius: ChinRadius.pill))
     }
 }
 
@@ -657,7 +669,7 @@ struct ChinCapabilityEvidenceRow: View {
                 .font(.title3)
                 .foregroundStyle(color(for: capability.colorName))
                 .frame(width: 36, height: 36)
-                .background(color(for: capability.colorName).opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
+                .background(color(for: capability.colorName).opacity(0.12), in: RoundedRectangle(cornerRadius: ChinRadius.chip))
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(evidence.title).font(.headline)
@@ -674,7 +686,7 @@ struct ChinCapabilityEvidenceRow: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .padding(.vertical, 6)
+        .padding(.vertical, ChinSpacing.sm)
     }
 
     private var statusColor: Color {
@@ -719,7 +731,7 @@ struct ChinWeeklyPlanView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
-                .padding(.vertical, 5)
+                .padding(.vertical, ChinSpacing.xs)
             }
             Section("七天路径") {
                 ForEach(plan.days) { day in
@@ -756,7 +768,7 @@ struct ChinWeeklyPlanView: View {
                                 .font(.title3)
                                 .foregroundStyle(day.isCompleted ? .green : .secondary)
                         }
-                        .padding(.vertical, 4)
+                        .padding(.vertical, ChinSpacing.xs)
                     }
                 }
             }
@@ -842,12 +854,12 @@ struct ChinTaskView: View {
                     Label("查看完整方法卡", systemImage: "arrow.up.right")
                         .font(.subheadline.weight(.semibold))
                 }
-                .padding(.top, 2)
+                .padding(.top, ChinSpacing.xs)
             }
         }
-        .padding(16)
+        .padding(ChinSpacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.orange.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
+        .background(Color.orange.opacity(0.1), in: RoundedRectangle(cornerRadius: ChinRadius.inner))
     }
 
     private var challengeCard: some View {
@@ -864,9 +876,9 @@ struct ChinTaskView: View {
             Text(task.prompt).font(.headline)
             TextEditor(text: $response)
                 .frame(minHeight: 150)
-                .padding(8)
+                .padding(ChinSpacing.sm)
                 .overlay {
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: ChinRadius.pill)
                         .stroke(Color.secondary.opacity(0.22))
                 }
             Text("先写自己的版本，再对照示例修改。")
@@ -880,9 +892,9 @@ struct ChinTaskView: View {
             Text("我的下一步").font(.headline)
             TextField("例如：下次先圈出动作，再写人物品质", text: $reflection, axis: .vertical)
                 .lineLimit(2...4)
-                .padding(12)
+                .padding(ChinSpacing.md)
                 .overlay {
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: ChinRadius.pill)
                         .stroke(Color.secondary.opacity(0.22))
                 }
         }
@@ -906,8 +918,8 @@ struct ChinTaskView: View {
                     Text("参考示例").font(.subheadline.weight(.semibold))
                     Text(task.example).font(.subheadline).foregroundStyle(.secondary)
                 }
-                .padding(12)
-                .background(Color.blue.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
+                .padding(ChinSpacing.md)
+                .background(Color.blue.opacity(0.08), in: RoundedRectangle(cornerRadius: ChinRadius.pill))
             }
         }
     }
@@ -981,7 +993,7 @@ struct ChinReviewView: View {
             .font(.caption)
             .foregroundStyle(mistake.isResolved ? .green : .orange)
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, ChinSpacing.xs)
     }
 }
 
@@ -1003,9 +1015,9 @@ struct ChinMistakeReviewView: View {
                     Text("为什么").font(.headline)
                     Text(mistake.explanation)
                 }
-                .padding(14)
+                .padding(ChinSpacing.field)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.blue.opacity(0.08), in: RoundedRectangle(cornerRadius: 10))
+                .background(Color.blue.opacity(0.08), in: RoundedRectangle(cornerRadius: ChinRadius.pill))
                 Button {
                     learning.resolveMistake(mistake.id)
                     dismiss()
@@ -1027,9 +1039,9 @@ struct ChinMistakeReviewView: View {
             Text(title).font(.caption.weight(.semibold)).foregroundStyle(tint)
             Text(text).font(.body)
         }
-        .padding(12)
+        .padding(ChinSpacing.md)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(tint.opacity(0.1), in: RoundedRectangle(cornerRadius: 10))
+        .background(tint.opacity(0.1), in: RoundedRectangle(cornerRadius: ChinRadius.pill))
     }
 }
 
@@ -1066,7 +1078,7 @@ struct ChinPortfolioView: View {
                                     .font(.caption)
                                     .foregroundStyle(.tertiary)
                             }
-                            .padding(.vertical, 4)
+                            .padding(.vertical, ChinSpacing.xs)
                         }
                     }
                 }
@@ -1116,7 +1128,7 @@ struct ChinEmptyState: View {
     var body: some View {
         VStack(spacing: 10) {
             Image(systemName: systemImage)
-                .font(.system(size: 34))
+                .font(ChinFont.promoHeadline)
                 .foregroundStyle(.tint)
             Text(title)
                 .font(.headline)

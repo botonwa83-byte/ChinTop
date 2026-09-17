@@ -52,14 +52,14 @@ struct ChinFeatureView: View {
                         Picker("显示模式", selection: $appearance.preference) {
                             ForEach(ChinAppearancePreference.allCases) { pref in Label(pref.label, systemImage: pref.icon).tag(pref) }
                         }.pickerStyle(.navigationLink)
-                    }.padding().background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
+                    }.padding().background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: ChinRadius.inner))
                     VStack(alignment: .leading, spacing: 12) {
                         Label("关于与协议", systemImage: "doc.text").font(.headline).foregroundStyle(.secondary)
                         ChinLegalLinksView()
                         Text("ChinTop · 语文登顶 v1.0.0")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                    }.padding().background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: 12))
+                    }.padding().background(Color.secondary.opacity(0.08), in: RoundedRectangle(cornerRadius: ChinRadius.inner))
                 }.padding().frame(maxWidth: 760, alignment: .leading)
             }.navigationTitle("功能").sheet(isPresented: $showPaywall) { ChinPaywallView() }
         }
@@ -67,16 +67,16 @@ struct ChinFeatureView: View {
     private var unlockCard: some View {
         Button { showPaywall = true } label: {
             HStack(spacing: 12) {
-                Image(systemName: "crown.fill").foregroundStyle(.white).frame(width: 44, height: 44).background(.white.opacity(0.18), in: RoundedRectangle(cornerRadius: 10))
+                Image(systemName: "crown.fill").foregroundStyle(.white).frame(width: 44, height: 44).background(.white.opacity(0.18), in: RoundedRectangle(cornerRadius: ChinRadius.pill))
                 VStack(alignment: .leading, spacing: 3) { Text("解锁完整版").font(.headline).foregroundStyle(.white); Text("五大专题完整题库 · 逐题解析 · 一次买断").font(.caption).foregroundStyle(.white.opacity(0.9)) }
                 Spacer(); Text(purchase.product?.displayPrice ?? "¥22").font(.headline).foregroundStyle(.white)
-            }.padding().background(LinearGradient(colors: [.orange, .pink], startPoint: .leading, endPoint: .trailing), in: RoundedRectangle(cornerRadius: 14))
+            }.padding().background(LinearGradient(colors: [.orange, .pink], startPoint: .leading, endPoint: .trailing), in: RoundedRectangle(cornerRadius: ChinRadius.panel))
         }.buttonStyle(.plain)
     }
     private func featureSection<Content: View>(_ title: String, _ icon: String, _ color: Color, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 10) { Label(title, systemImage: icon).font(.headline).foregroundStyle(color); VStack(spacing: 10) { content() } }
     }
     private func featureLink<Destination: View>(_ icon: String, _ title: String, _ subtitle: String, @ViewBuilder destination: () -> Destination) -> some View {
-        NavigationLink { destination() } label: { HStack(spacing: 12) { Image(systemName: icon).font(.title3).foregroundStyle(.tint).frame(width: 38, height: 38).background(Color.accentColor.opacity(0.1), in: RoundedRectangle(cornerRadius: 9)); VStack(alignment: .leading, spacing: 3) { Text(title).font(.headline); Text(subtitle).font(.caption).foregroundStyle(.secondary) }; Spacer(); Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary) }.padding(12).background(Color.secondary.opacity(0.07), in: RoundedRectangle(cornerRadius: 10)) }.buttonStyle(.plain)
+        NavigationLink { destination() } label: { HStack(spacing: 12) { Image(systemName: icon).font(.title3).foregroundStyle(.tint).frame(width: 38, height: 38).background(Color.accentColor.opacity(0.1), in: RoundedRectangle(cornerRadius: ChinRadius.chip)); VStack(alignment: .leading, spacing: 3) { Text(title).font(.headline); Text(subtitle).font(.caption).foregroundStyle(.secondary) }; Spacer(); Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary) }.padding(ChinSpacing.md).background(Color.secondary.opacity(0.07), in: RoundedRectangle(cornerRadius: ChinRadius.pill)) }.buttonStyle(.plain)
     }
 }

@@ -83,6 +83,32 @@ final class ChinLearningStore: ObservableObject {
         snapshot.portfolio.filter { $0.capabilityID == capabilityID }.count
     }
 
+    // MARK: - 学习路径进度
+
+    /// 已经练过至少一个题的知识点。
+    var practicedKnowledgePoints: Set<String> {
+        Set(snapshot.knowledgePointProgress.keys)
+    }
+
+    func practicedCount(for knowledgePointID: String) -> Int {
+        snapshot.knowledgePointProgress[knowledgePointID] ?? 0
+    }
+
+    /// 还有未消化错题的知识点（需要回头巩固）。
+    var weakKnowledgePoints: Set<String> {
+        Set(snapshot.unresolvedMistakes.compactMap(\.knowledgePointID))
+    }
+
+    /// 这一步是否算过关：练过题，且这个知识点没有未消化的错题。
+    func isKnowledgePointPassed(_ knowledgePointID: String) -> Bool {
+        practicedCount(for: knowledgePointID) > 0 && !weakKnowledgePoints.contains(knowledgePointID)
+    }
+
+    /// 下一步该学什么：优先第一个没练过的知识点，全部练过后回到有待巩固的知识点。
+    var nextPathStep: ChinPathStep? {
+        ChinLearningPath.nextStep(for: grade, practiced: practicedKnowledgePoints, weakPoints: weakKnowledgePoints)
+    }
+
     private func sync() {
         snapshot = repository.snapshot
     }

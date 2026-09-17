@@ -17,7 +17,13 @@ struct ChinTopApp: App {
 }
 
 struct ChinRootView: View {
-    var body: some View { ContentView() }
+    /// 启动先展示品牌广告页（可跳过）：介绍软件 + 同门软件推荐 + 是否解锁询问。
+    @State private var showPromo = true
+
+    var body: some View {
+        ContentView()
+            .fullScreenCover(isPresented: $showPromo) { ChinPromoView { showPromo = false } }
+    }
 }
 
 struct ContentView: View {

@@ -2,6 +2,12 @@ import SwiftUI
 
 struct ChinPromoView: View {
     let onEnter: () -> Void
+    @ObservedObject private var purchase = ChinPurchaseManager.shared
+    @State private var showPaywall = false
+
+    /// 价格以 ASC 为准；未加载出来时不编造数字，只留「一杯奶茶」的比喻。
+    private var priceLabel: String { purchase.product?.displayPrice ?? "（一杯奶茶）" }
+
     var body: some View {
         ZStack {
             LinearGradient(colors: [Color(red: 0.12, green: 0.08, blue: 0.18), Color(red: 0.28, green: 0.12, blue: 0.22)], startPoint: .top, endPoint: .bottom).ignoresSafeArea()
@@ -17,10 +23,35 @@ struct ChinPromoView: View {
                     }
                     HStack { stat("\(ChinModule.all.count)", "语文专题"); Divider().frame(height: 28); stat("\(ChinDailyTaskCatalog.all.count)", "能力任务"); Divider().frame(height: 28); stat("\(ChinCapability.all.count)", "能力方向") }.padding().background(.white.opacity(0.08), in: RoundedRectangle(cornerRadius: ChinRadius.panel))
                     Text("学习闭环：学方法 → 做任务 → 写作品 → 看错因 → 再迁移").font(.caption).foregroundStyle(.pink).multilineTextAlignment(.center).padding(.vertical, ChinSpacing.sm)
+                    ChinFamilyAdSection(current: .chin, onDark: true)
+                    ChinUnlockAskCard(price: priceLabel, onDark: true, onUnlock: { showPaywall = true }, onBrowse: { onEnter() })
                     Text("ChinTop · 语文登顶  v1.0.0\n本地保存学习轨迹，数据只保留在本设备。").font(.caption).multilineTextAlignment(.center).foregroundStyle(.white.opacity(0.45)).padding(.vertical, ChinSpacing.xl)
                     Button(action: onEnter) { Label("开启语文登顶之旅", systemImage: "arrow.right").font(.headline).frame(maxWidth: .infinity).padding().background(.pink, in: RoundedRectangle(cornerRadius: ChinRadius.panel)).foregroundStyle(.white) }.padding(.bottom, ChinSpacing.page)
                 }.padding(.horizontal, ChinSpacing.page).frame(maxWidth: 600)
             }
+            skipButton
+        }
+        .sheet(isPresented: $showPaywall) { ChinPaywallView() }
+        .onChange(of: purchase.isUnlocked) { unlocked in
+            if unlocked { onEnter() }
+        }
+    }
+
+    /// 引导页可跳过：不想看介绍的学生直接进入主界面。
+    private var skipButton: some View {
+        VStack {
+            HStack {
+                Spacer()
+                Button("跳过", action: onEnter)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.white.opacity(0.85))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, ChinSpacing.sm)
+                    .background(.white.opacity(0.14), in: Capsule())
+            }
+            .padding(.trailing, 20)
+            .padding(.top, ChinSpacing.md)
+            Spacer()
         }
     }
     private func stat(_ value: String, _ label: String) -> some View { VStack { Text(value).font(.headline).foregroundStyle(.pink); Text(label).font(.caption).foregroundStyle(.white.opacity(0.6)) }.frame(maxWidth: .infinity) }

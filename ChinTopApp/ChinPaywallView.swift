@@ -13,6 +13,7 @@ struct ChinPaywallView: View {
             ], id: \.1) { item in
                 Label(item.1, systemImage: item.0).font(.headline)
             }
+            ChinMilkTeaPitchCard()
             Button { Task { await purchase.purchase() } } label: { Label(purchase.isPurchasing ? "处理中…" : "立即解锁  \(purchase.product?.displayPrice ?? "—")", systemImage: "lock.open.fill").frame(maxWidth: .infinity).padding() }.buttonStyle(.borderedProminent)
             if purchase.productLoadFailed { HStack(spacing: 8) { Text("价格暂时无法加载，请检查网络").font(.caption).foregroundStyle(.orange); Button("重试") { Task { await purchase.retryLoadProduct() } }.font(.caption) } }
             Button("恢复购买") { Task { await purchase.restore() } }.frame(maxWidth: .infinity)
@@ -21,6 +22,7 @@ struct ChinPaywallView: View {
                 Text("购买即视为同意《用户协议》与《隐私政策》。付款通过 Apple 账户完成，换机后可用「恢复购买」找回。")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
+                ChinFamilyAdSection(current: .chin)
                 ChinLegalLinksView()
             }
             .frame(maxWidth: .infinity, alignment: .leading)

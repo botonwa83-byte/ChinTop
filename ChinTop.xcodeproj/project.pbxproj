@@ -11,6 +11,7 @@
 		094DA08DB1B27C456DC9073E /* ChinLearningStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37862AC0ACB9806893DB4537 /* ChinLearningStore.swift */; };
 		0D17691D0B6A0AB5F3743729 /* ChinLearningCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788D21238E6417CF09918C13 /* ChinLearningCore.swift */; };
 		0DD849D81351CA8A35C05346 /* ChinPaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F67ADC639FED6AEB00C2F4E /* ChinPaywallView.swift */; };
+		64DA23DDDF3146AA806EFBDC /* ChinFamilyAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE84974D584F4817A587A7CF /* ChinFamilyAdView.swift */; };
 		1132639EC81775EE0ABD65D7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD546BD38DA581DA0CB13C57 /* Assets.xcassets */; };
 		1EB81653CE3F66A77419F89D /* ChinPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E05A1059FC2CD1C2E25DB21 /* ChinPurchaseManager.swift */; };
 		2B77BBCDC67144CCEA73C000 /* ChinLearningCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788D21238E6417CF09918C13 /* ChinLearningCore.swift */; };
@@ -35,6 +36,7 @@
 		0694E99EEBA7400972CA97B1 /* ChinLearningCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinLearningCoreTests.swift; sourceTree = "<group>"; };
 		0C75DBB5A6AC6B4537197335 /* ChinAppearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinAppearance.swift; sourceTree = "<group>"; };
 		0F67ADC639FED6AEB00C2F4E /* ChinPaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinPaywallView.swift; sourceTree = "<group>"; };
+		BE84974D584F4817A587A7CF /* ChinFamilyAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinFamilyAdView.swift; sourceTree = "<group>"; };
 		1D541EF6569FEA5135132585 /* ChinContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinContent.swift; sourceTree = "<group>"; };
 		277ADCE0ADBF2EE7D7176BF7 /* ChinQuestionBankTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinQuestionBankTests.swift; sourceTree = "<group>"; };
 		37862AC0ACB9806893DB4537 /* ChinLearningStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChinLearningStore.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				B5AA6529FAD1805D3B4BBCE5 /* ChinLearningViews.swift */,
 				5DC99160F9A45A359E809724 /* ChinLegal.swift */,
 				0F67ADC639FED6AEB00C2F4E /* ChinPaywallView.swift */,
+				BE84974D584F4817A587A7CF /* ChinFamilyAdView.swift */,
 				D3CA4764969356D5396664C6 /* ChinPromoView.swift */,
 				5E05A1059FC2CD1C2E25DB21 /* ChinPurchaseManager.swift */,
 				4256F5195BDED6C499DAA18A /* ChinTopApp.swift */,
@@ -217,6 +220,7 @@
 				064EFAB517F4F1FBC1BDB814 /* ChinLearningViews.swift in Sources */,
 				705C131EF0D93CB7FD7B0E61 /* ChinLegal.swift in Sources */,
 				0DD849D81351CA8A35C05346 /* ChinPaywallView.swift in Sources */,
+				64DA23DDDF3146AA806EFBDC /* ChinFamilyAdView.swift in Sources */,
 				D4384AE72DAFCC4C7387F58B /* ChinPromoView.swift in Sources */,
 				1EB81653CE3F66A77419F89D /* ChinPurchaseManager.swift in Sources */,
 				326EAD36A2C991A38EE4D227 /* ChinQuestionBank.swift in Sources */,
